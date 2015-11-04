@@ -1,0 +1,78 @@
+﻿@using System.Web.Optimization
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Log-in or Register Your Account</title>
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/reset.css")">
+
+    <link rel='stylesheet prefetch' href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
+    <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/style.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap-theme.min.css")">
+</head>
+
+<body>
+
+    <!-- Form Mixin-->
+    <!-- Pen Title-->
+    <div class="pen-title">
+        <h1>Log-in/Register Your Account</h1>
+    </div>
+    <!-- Form Module-->
+    <div class="module form-module" ng-app="LoginTestApp">
+        <div class="toggle">
+            <i class="fa fa-times fa-pencil"></i>
+            <div class="tooltip" >Click Me</div>
+        </div>
+
+            <div class="form" ng-controller="LoginCtrl">
+                <h2>Login to your account</h2>
+                <form>
+                    <input type="text" placeholder="Username" name="aliasTxt" ng-model="alias"/>
+                    <input type="password" placeholder="Password" name="passwordTxt" ng-model="password"/>
+                    <button ng-click="checkUserCredentials()" ng-disabled="isWorking">Login</button>
+                    <br/>
+                    <br/>
+                    <label style="color: red">{{messages}}</label>
+                </form>
+            </div>
+
+        <div class="form">
+            <h2>Create an account</h2>
+            <form>
+                <input type="text" placeholder="Username" />
+                <input type="password" placeholder="Password" />
+                <input type="email" placeholder="Email Address" />
+                <input type="tel" placeholder="Phone Number" />
+                <button>Register</button>
+            </form>
+        </div>
+
+        <div ng-controller="ForgotPassCtrl">
+            <div class="cta" ng-click="showForgotPassDialog()"><a href="">Forgot your password?</a>
+            </div>
+        </div>
+
+        <div ng-controller="PassRecoveryCtrl" ng-init="setViewModel(@Json.Encode(Model))">
+            <div></div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="@Url.Content("~/Scripts/jquery-2.1.4.js")"></script>
+<script src="@Url.Content("~/Scripts/angular.js")"></script>
+<script src="@Url.Content("~/Scripts/angular-ui/ui-bootstrap-tpls.min.js")"></script>
+
+<script src="@Url.Content("~/Scripts/App/angularModalService.js")"></script>
+<script src="@Url.Content("~/Scripts/App/loginController.js")"></script>
+

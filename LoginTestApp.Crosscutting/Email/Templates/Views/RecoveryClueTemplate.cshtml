@@ -1,0 +1,29 @@
+@* Generator : Template TypeVisibility : Public GeneratePrettyNames : true*@
+
+@* ReSharper disable once CSharpWarnings::CS0108 *@
+@functions {
+    public LoginTestApp.Crosscutting.EMail.Templates.Models.RecoveryClueModel Model { get; set; }
+
+    public string Subject
+    {
+        get { return "Password Recovery - Recovery Clue Requested"; }
+    }
+}
+
+@* Starts Template Body *@
+
+    @*{{ 'logo.png' | asset_url | img_tag }}*@
+    @if (!string.IsNullOrWhiteSpace(Model.CustomerName))
+    {
+        <p>Dear <b>@Model.CustomerName</b></p>
+    }
+    <p></p>
+    <p>You have requested your recovery clue for your account at <b>@Model.ApplicationName</b>.</p>
+    <p></p>
+    <p>Please find it below. </p>
+    <p></p>
+    <p>Recovery Clue: @Model.RecoveryClue</p>
+    <p></p>
+    <p>If you received this email due to an error, you can safely ignore it.</p>
+
+@* Ends Template Body *@
