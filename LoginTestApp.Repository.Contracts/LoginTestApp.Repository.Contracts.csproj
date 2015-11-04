@@ -52,6 +52,10 @@
       <Project>{F14B2216-552A-4776-95A7-E45490CDBCDD}</Project>
       <Name>LoginTestApp.Business.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LoginTestApp.DataAccess.Contracts\LoginTestApp.DataAccess.Contracts.csproj">
+      <Project>{ACB9EEB2-3784-4669-B1A4-050DE7FB9466}</Project>
+      <Name>LoginTestApp.DataAccess.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

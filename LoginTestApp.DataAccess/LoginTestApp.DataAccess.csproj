@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Configuration\DynamicLinkMapping.cs" />
     <Compile Include="Configuration\UserMapping.cs" />
+    <Compile Include="Context\IDbContextBase.cs" />
     <Compile Include="Context\LoginTestAppContext.cs" />
     <Compile Include="Context\LoginTestAppInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

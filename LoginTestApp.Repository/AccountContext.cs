@@ -1,4 +1,3 @@
-using System.Data.Entity;
 using LoginTestApp.Crosscutting.Contracts;
 using LoginTestApp.DataAccess.Contracts.Context;
 using LoginTestApp.Repository.Contracts;
@@ -9,7 +8,7 @@ namespace LoginTestApp.Repository
     public class AccountContext : ContextBase, IAccountContext
     {
         public AccountContext(ILoginTestAppContext dbContext, IDataMapper dataMapper) 
-            : base((DbContext)dbContext, dataMapper)
+            : base(dbContext, dataMapper)
         {
         }
 

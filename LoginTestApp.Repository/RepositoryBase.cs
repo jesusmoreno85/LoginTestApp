@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -17,10 +16,10 @@ namespace LoginTestApp.Repository
     /// <typeparam name="TModel">Model type</typeparam>
     /// <typeparam name="TKey">Model's primary key type</typeparam>
     /// <typeparam name="TEntity">DataAcess Entity Type to Map To and Map From</typeparam>
-	public abstract class RepositoryBase<TModel, TKey, TEntity> : IRepository<TModel, TKey>
-		where TModel : class, IModel<TKey>
-		where TEntity : class, IEntity<TKey>
-	{
+	public abstract class RepositoryBase<TModel, TKey, TEntity> : IRepository<TModel, TKey>, IDataInteractions
+        where TModel : class, IModel<TKey>
+        where TEntity : class, IEntity<TKey>
+    {
         #region Private Members
 
         private readonly string tableName;
@@ -29,9 +28,9 @@ namespace LoginTestApp.Repository
 
         #endregion Private Members
 
-        #region Protected Members
+        public event Action<object, object> OnDataChange;
 
-        protected readonly ConcurrentDictionary<TEntity, TModel> SyncDictionary;
+        #region Protected Members
 
         protected readonly IDbSet<TEntity> DbSet;
 
@@ -47,7 +46,6 @@ namespace LoginTestApp.Repository
 
 			if (dataMapper == null) throw new ArgumentNullException(nameof(dataMapper));
 
-            SyncDictionary = new ConcurrentDictionary<TEntity, TModel>();
             DbContext = dbContext;
 			DbSet = dbContext.Set<TEntity>();
 			DataMapper = dataMapper;
@@ -56,17 +54,22 @@ namespace LoginTestApp.Repository
 			keyColumnName = dbContext.GetKeyPropertiesNames<TEntity>().Single();
 		}
 
-		public void Create(TModel model)
+        protected void RaiseOnDataChange(TModel model, TEntity entity)
+        {
+            OnDataChange?.Invoke(model, entity);
+        }
+
+        public void Create(TModel model)
 		{
 			if (model == null) throw new ArgumentNullException(nameof(model));
 
 			var entity = DataMapper.MapTo<TEntity>(model);
 
-		    SyncDictionary.TryAdd(entity, model);
-			DbSet.Add(entity);
-		}
+		    DbSet.Add(entity);
+            RaiseOnDataChange(model, entity);
+        }
 
-		public TModel GetById(TKey id)
+        public TModel GetById(TKey id)
 		{
 			var entity = DbSet.Find(id);
 
@@ -120,9 +123,9 @@ namespace LoginTestApp.Repository
 
 			var entity = DataMapper.MapTo<TEntity>(model);
 
-            SyncDictionary.TryAdd(entity, model);
             DbSet.Attach(entity);
 			DbContext.Entry(entity).State = EntityState.Modified;
-		}
+            RaiseOnDataChange(model, entity);
+        }
 	}
 }

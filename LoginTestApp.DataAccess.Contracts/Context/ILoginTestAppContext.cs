@@ -1,11 +1,9 @@
 ﻿using System.Data.Entity;
-using System.Threading;
-using System.Threading.Tasks;
 using LoginTestApp.DataAccess.Contracts.Entities;
 
 namespace LoginTestApp.DataAccess.Contracts.Context
 {
-	public interface ILoginTestAppContext
+	public interface ILoginTestAppContext : IDbContext
 	{
 		#region Properties
 
@@ -14,17 +12,5 @@ namespace LoginTestApp.DataAccess.Contracts.Context
 		IDbSet<DynamicLink> DynamicLinks { get; set; }
 
 		#endregion Properties
-
-		//#region Methods
-
-		//int SaveChanges();
-
-		//Task<int> SaveChangesAsync();
-
-		//Task<int> SaveChangesAsync(CancellationToken cancellationToken);
-
-		//DbSet<TEntity> DbSet<TEntity>() where TEntity : class;
-
-		//#endregion Methods
 	}
 }

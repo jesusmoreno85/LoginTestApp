@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Constants\ModelBase.cs" />
     <Compile Include="Constants\Users.cs" />
+    <Compile Include="Context\IDbContext.cs" />
     <Compile Include="Context\ILoginTestAppContext.cs" />
     <Compile Include="EntityTypeConfigurationBase.cs" />
     <Compile Include="IEntity.cs" />

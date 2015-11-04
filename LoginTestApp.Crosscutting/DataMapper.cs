@@ -21,5 +21,10 @@ namespace LoginTestApp.Crosscutting
         {
             return Mapper.Map<TDestination>(source);
         }
+
+        public object MapTo(object source, object destination)
+        {
+            return Mapper.Map(source, destination);
+        }
     }
 }

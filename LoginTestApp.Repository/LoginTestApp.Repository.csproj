@@ -58,6 +58,7 @@
     <Compile Include="ContextBase.cs" />
     <Compile Include="ExtensionMethods\AutoMapperExtensions.cs" />
     <Compile Include="ExtensionMethods\ContextExtensions.cs" />
+    <Compile Include="IDataInteractions.cs" />
     <Compile Include="MappingConfiguration\LoginTestAppConfigProfile.cs" />
     <Compile Include="Repositories\DynamicLinksRepository.cs" />
     <Compile Include="Repositories\UsersRepository.cs" />

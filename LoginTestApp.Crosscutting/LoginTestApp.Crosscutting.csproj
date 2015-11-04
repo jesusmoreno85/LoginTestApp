@@ -95,6 +95,7 @@
       <DependentUpon>ResetLinkTemplate.cshtml</DependentUpon>
     </Compile>
     <Compile Include="ExtensionMethods\IEnumerableExtensions.cs" />
+    <Compile Include="ExtensionMethods\GenericExtensions.cs" />
     <Compile Include="HttpContext.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="NullableExtensions.cs" />
