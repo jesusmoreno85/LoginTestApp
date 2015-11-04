@@ -3,16 +3,15 @@ using System.Data.Entity;
 using System.Linq;
 using LoginTestApp.Business.Contracts.Models;
 using LoginTestApp.Crosscutting.Contracts;
-using LoginTestApp.DataAccess.Contracts.Context;
-using LoginTestApp.Repository.Contracts;
+using LoginTestApp.Repository.Contracts.Repositories;
 using Entities = LoginTestApp.DataAccess.Contracts.Entities;
 
-namespace LoginTestApp.Repository
+namespace LoginTestApp.Repository.Repositories
 {
 	class DynamicLinksRepository : RepositoryBase<DynamicLink, int, Entities.DynamicLink>, IDynamicLinksRepository
 	{
-		public DynamicLinksRepository(ILoginTestAppContext dbContext, IDataMapper dataMapper)
-			: base((DbContext)dbContext, dataMapper)
+		public DynamicLinksRepository(DbContext dbContext, IDataMapper dataMapper)
+			: base(dbContext, dataMapper)
 		{
 
 		}

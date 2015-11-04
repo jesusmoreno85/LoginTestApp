@@ -7,8 +7,8 @@ namespace LoginTestApp.Repository.Contracts
 	/// </summary>
 	/// <typeparam name="TModel">The model type to work with</typeparam>
 	/// <typeparam name="TKey">The primary key type of this model</typeparam>
-	public interface IRepository<TModel, in TKey>
-		where TModel : IModel<TKey>
+	public interface IRepository<TModel, in TKey> : IRepository
+        where TModel : IModel<TKey>
 	{
 		void Create(TModel model);
 
@@ -20,4 +20,6 @@ namespace LoginTestApp.Repository.Contracts
 
 		void Update(TModel model);
 	}
+
+    public interface IRepository { }
 }

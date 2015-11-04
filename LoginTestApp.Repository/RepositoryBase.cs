@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -20,14 +21,19 @@ namespace LoginTestApp.Repository
 		where TModel : class, IModel<TKey>
 		where TEntity : class, IEntity<TKey>
 	{
+        #region Private Members
 
-		private readonly string tableName;
+        private readonly string tableName;
 		
 		private readonly string keyColumnName;
 
-		#region Protected Members
+        #endregion Private Members
 
-		protected readonly IDbSet<TEntity> DbSet;
+        #region Protected Members
+
+        protected readonly ConcurrentDictionary<TEntity, TModel> SyncDictionary;
+
+        protected readonly IDbSet<TEntity> DbSet;
 
 		protected readonly IDataMapper DataMapper;
 
@@ -41,7 +47,8 @@ namespace LoginTestApp.Repository
 
 			if (dataMapper == null) throw new ArgumentNullException(nameof(dataMapper));
 
-			DbContext = dbContext;
+            SyncDictionary = new ConcurrentDictionary<TEntity, TModel>();
+            DbContext = dbContext;
 			DbSet = dbContext.Set<TEntity>();
 			DataMapper = dataMapper;
 
@@ -55,10 +62,8 @@ namespace LoginTestApp.Repository
 
 			var entity = DataMapper.MapTo<TEntity>(model);
 
+		    SyncDictionary.TryAdd(entity, model);
 			DbSet.Add(entity);
-
-		    // ReSharper disable once RedundantAssignment
-			model = DataMapper.MapTo<TModel>(entity);
 		}
 
 		public TModel GetById(TKey id)
@@ -86,13 +91,16 @@ namespace LoginTestApp.Repository
 
 			int recordsAffected;
 
-			if (typeof(TKey) == typeof(int))
+		    Type idType = typeof (TKey);
+
+            if (idType == typeof(int))
 			{
 				if (Convert.ToInt32(id) == 0) throw new ArgumentException("id has a valid value of 0");
 
 				recordsAffected = DbContext.Database.ExecuteSqlCommand("DELETE FROM {0} WHERE {1} = {2}", tableName, keyColumnName, id);
 			}
-			else if (typeof(TKey) == typeof(string))
+			else if (idType == typeof(string) 
+                || idType == typeof(Guid))
 			{
 				if (string.IsNullOrWhiteSpace(id.ToString())) throw new ArgumentException($"id has a valid value of '{id}'");
 
@@ -112,11 +120,9 @@ namespace LoginTestApp.Repository
 
 			var entity = DataMapper.MapTo<TEntity>(model);
 
-			DbSet.Attach(entity);
+            SyncDictionary.TryAdd(entity, model);
+            DbSet.Attach(entity);
 			DbContext.Entry(entity).State = EntityState.Modified;
-
-		    // ReSharper disable once RedundantAssignment
-			model = DataMapper.MapTo<TModel>(entity);
 		}
 	}
 }

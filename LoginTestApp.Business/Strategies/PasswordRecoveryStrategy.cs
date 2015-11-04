@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Net.Mail;
 using System.Reflection;
@@ -18,7 +17,7 @@ namespace LoginTestApp.Business.Strategies
 {
 	public class PasswordRecoveryStrategy : IPasswordRecoveryStrategy
 	{
-		private readonly IRepositoryManager repositoryManager;
+		private readonly IAccountContext accountContext;
 		private readonly IEmailSender eMailSender;
 		private readonly ISystemContext systemContext;
 		private readonly ICryptoProvider cryptoProvider;
@@ -31,9 +30,9 @@ namespace LoginTestApp.Business.Strategies
 			new ConcurrentDictionary<string, MethodInfo>();
 
 		public PasswordRecoveryStrategy
-			(IRepositoryManager repositoryManager, IEmailSender eMailSender, ISystemContext systemContext, ICryptoProvider cryptoProvider, IConfigurationProvider configProvider)
+			(IAccountContext accountContext, IEmailSender eMailSender, ISystemContext systemContext, ICryptoProvider cryptoProvider, IConfigurationProvider configProvider)
 		{
-			this.repositoryManager = repositoryManager;
+			this.accountContext = accountContext;
 			this.eMailSender = eMailSender;
 			this.systemContext = systemContext;
 			this.cryptoProvider = cryptoProvider;
@@ -148,8 +147,8 @@ namespace LoginTestApp.Business.Strategies
 				IsConsumed = false
 			};
 
-			repositoryManager.DynamicLinks.Create(dynamicLink);
-			repositoryManager.SaveChanges();
+			accountContext.DynamicLinks.Create(dynamicLink);
+			accountContext.SaveChanges();
 		}
 	}
 }

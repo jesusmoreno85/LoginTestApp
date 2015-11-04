@@ -1,7 +1,11 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using LoginTestApp.Crosscutting.Contracts;
 using LoginTestApp.DataAccess.Configuration;
+using LoginTestApp.DataAccess.Contracts;
 using LoginTestApp.DataAccess.Contracts.Context;
 using LoginTestApp.DataAccess.Contracts.Entities;
 
@@ -30,20 +34,22 @@ namespace LoginTestApp.DataAccess.Context
 
 		public IDbSet<DynamicLink> DynamicLinks { get; set; }
 
-		#endregion ILoginTestAppContext
+        public event Action<List<DbEntityEntry>> OnSaveChanges;
 
-		public override int SaveChanges()
+        #endregion ILoginTestAppContext
+
+        public override int SaveChanges()
 		{
 			var entities = ChangeTracker.Entries()
 							.Where(t =>
-								t.Entity is EntityBase &&
+								t.Entity is IEntity &&
 								(t.State == EntityState.Added || t.State == EntityState.Modified))
 							.ToList();
 
 			entities
 				.ForEach(dbEntry =>
 				{
-					var baseEntity = (EntityBase)dbEntry.Entity;
+					var baseEntity = (IEntity)dbEntry.Entity;
 
 					if (dbEntry.State == EntityState.Added)
 					{
@@ -55,7 +61,11 @@ namespace LoginTestApp.DataAccess.Context
 					baseEntity.LastModifiedBy = systemContext.UserName;
 				});
 
-			return base.SaveChanges();
-		}
+            int recordsAffected = base.SaveChanges();
+
+            OnSaveChanges?.Invoke(entities);
+
+            return recordsAffected;
+        }
 	}
 }

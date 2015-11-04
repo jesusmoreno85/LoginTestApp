@@ -10,7 +10,6 @@ using LoginTestApp.Crosscutting;
 using LoginTestApp.Crosscutting.Contracts;
 using LoginTestApp.Crosscutting.Contracts.Email;
 using LoginTestApp.Crosscutting.EMail;
-using LoginTestApp.Crosscutting.EMail.Templates;
 using LoginTestApp.DataAccess.Context;
 using LoginTestApp.DataAccess.Contracts.Context;
 using LoginTestApp.Repository;
@@ -38,7 +37,8 @@ namespace LoginTestApp
 			RegisterCrosscuttingConcerns(container);
 			RegisterStrategies(container);
 			RegisterManagers(container);
-			RegisterControllers(container);
+            RegisterDomainContexts(container);
+            RegisterControllers(container);
 
 			//Injection Constructions
 			container.RegisterType<ILoginTestAppContext, LoginTestAppContext>
@@ -47,7 +47,7 @@ namespace LoginTestApp
 			return container;
 		}
 
-		private static void RegisterStrategies(UnityContainer container)
+        private static void RegisterStrategies(UnityContainer container)
 		{
 			container.RegisterType<IPasswordRecoveryStrategy, PasswordRecoveryStrategy>();
 		}
@@ -60,10 +60,14 @@ namespace LoginTestApp
 		private static void RegisterManagers(IUnityContainer container)
 		{
 			container.RegisterType<IAccountManager, AccountManager>();
-			container.RegisterType<IRepositoryManager, RepositoryManager>();
 		}
 
-		private static void RegisterCrosscuttingConcerns(IUnityContainer container)
+        private static void RegisterDomainContexts(IUnityContainer container)
+        {
+            container.RegisterType<IAccountContext, AccountContext>();
+        }
+
+        private static void RegisterCrosscuttingConcerns(IUnityContainer container)
 		{
 			container.RegisterType<ILogger, Logger>(new InjectionConstructor("LoginTestApp", "Application"));
 			container.RegisterType<ISystemContext, HttpContext>(new InjectionConstructor("App Full Name"));

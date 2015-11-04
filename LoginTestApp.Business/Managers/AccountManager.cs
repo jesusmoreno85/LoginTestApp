@@ -10,14 +10,14 @@ namespace LoginTestApp.Business.Managers
 {
 	public class AccountManager : IAccountManager
 	{
-		private readonly IRepositoryManager repositoryManager;
+		private readonly IAccountContext accountContext;
 		private readonly ICryptoProvider cryptoProvider;
 		private readonly IPasswordRecoveryStrategy recoveryResolver;
 		private readonly ISystemContext systemContext;
 
-		public AccountManager(IRepositoryManager repositoryManager, ICryptoProvider cryptoProvider, IPasswordRecoveryStrategy recoveryResolver, ISystemContext systemContext)
+		public AccountManager(IAccountContext accountContext, ICryptoProvider cryptoProvider, IPasswordRecoveryStrategy recoveryResolver, ISystemContext systemContext)
 		{
-			this.repositoryManager = repositoryManager;
+			this.accountContext = accountContext;
 			this.cryptoProvider = cryptoProvider;
 			this.recoveryResolver = recoveryResolver;
 			this.systemContext = systemContext;
@@ -44,15 +44,12 @@ namespace LoginTestApp.Business.Managers
 			}
 
 			var recoveryStrategy = recoveryResolver.GetRecoveryStrategy(recoveryOption, out errorMessage);
-			if (recoveryStrategy != null)
-			{
-				recoveryStrategy.Invoke(user);
-			}
+		    recoveryStrategy?.Invoke(user);
 		}
 
 		public bool ValidatePasswordRecoveryRequest(Guid guidId, out string errorMessage)
 		{
-			DynamicLink link = repositoryManager.DynamicLinks.GetByGuidId(guidId);
+			DynamicLink link = accountContext.DynamicLinks.GetByGuidId(guidId);
 
 			if (link == null)
 			{
@@ -72,7 +69,7 @@ namespace LoginTestApp.Business.Managers
 
 		public User FindUserByAlias(string alias, bool isActive = true)
 		{
-			return repositoryManager.Users.FindUserByAlias(alias, isActive);
+			return accountContext.Users.FindUserByAlias(alias, isActive);
 		}
 	}
 }
