@@ -8,7 +8,7 @@ using Entities = LoginTestApp.DataAccess.Contracts.Entities;
 
 namespace LoginTestApp.Repository.Repositories
 {
-	class DynamicLinksRepository : RepositoryBase<DynamicLink, int, Entities.DynamicLink>, IDynamicLinksRepository
+    public class DynamicLinksRepository : RepositoryBase<DynamicLink, int, Entities.DynamicLink>, IDynamicLinksRepository
 	{
 		public DynamicLinksRepository(DbContext dbContext, IDataMapper dataMapper)
 			: base(dbContext, dataMapper)

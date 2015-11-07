@@ -14,10 +14,14 @@ using LoginTestApp.DataAccess.Context;
 using LoginTestApp.DataAccess.Contracts.Context;
 using LoginTestApp.Repository;
 using LoginTestApp.Repository.Contracts;
+using LoginTestApp.Repository.Contracts.Repositories;
 using LoginTestApp.Repository.MappingConfiguration;
+using LoginTestApp.Repository.Repositories;
 using Microsoft.Practices.Unity;
 using Unity.Mvc3;
+using DependencyResolver = System.Web.Mvc.DependencyResolver;
 using IConfigurationProvider = LoginTestApp.Crosscutting.Contracts.IConfigurationProvider;
+using IDependencyResolver = LoginTestApp.Crosscutting.Contracts.IDependencyResolver;
 
 namespace LoginTestApp
 {
@@ -34,23 +38,32 @@ namespace LoginTestApp
 		{
 			var container = new UnityContainer();
 
-			RegisterCrosscuttingConcerns(container);
+            container.RegisterType<IDependencyResolver, Crosscutting.DependencyResolver>(new InjectionConstructor(container));
+
+            RegisterCrosscuttingConcerns(container);
 			RegisterStrategies(container);
 			RegisterManagers(container);
             RegisterDomainContexts(container);
             RegisterControllers(container);
+            RegisterRepositories(container);
 
-			//Injection Constructions
-			container.RegisterType<ILoginTestAppContext, LoginTestAppContext>
+            //Injection Constructions
+            container.RegisterType<ILoginTestAppContext, LoginTestAppContext>
 				(new InjectionConstructor("LoginTestAppContext", new ResolvedParameter(typeof(ISystemContext))));
 
 			return container;
 		}
 
+        private static void RegisterRepositories(UnityContainer container)
+        {
+            container.RegisterType<IDynamicLinksRepository, DynamicLinksRepository>();
+            container.RegisterType<IUsersRepository, UsersRepository>();
+        }
+
         private static void RegisterStrategies(UnityContainer container)
 		{
 			container.RegisterType<IPasswordRecoveryStrategy, PasswordRecoveryStrategy>();
-		}
+        }
 
 		private static void RegisterControllers(IUnityContainer container)
 		{
@@ -90,3 +103,4 @@ namespace LoginTestApp
 		}
 	}
 }
+

@@ -46,6 +46,7 @@
     <Compile Include="IDataMapper.cs" />
     <Compile Include="Email\IEmailSender.cs" />
     <Compile Include="ICryptoProvider.cs" />
+    <Compile Include="IDependencyResolver.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="ISystemContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

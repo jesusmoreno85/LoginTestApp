@@ -7,8 +7,8 @@ namespace LoginTestApp.Repository
 {
     public class AccountContext : ContextBase, IAccountContext
     {
-        public AccountContext(ILoginTestAppContext dbContext, IDataMapper dataMapper) 
-            : base(dbContext, dataMapper)
+        public AccountContext(ILoginTestAppContext dbContext, IDataMapper dataMapper, IDependencyResolver dependencyResolver) 
+            : base(dbContext, dataMapper, dependencyResolver)
         {
         }
 

@@ -15,7 +15,11 @@ namespace LoginTestApp.Business.Managers
 		private readonly IPasswordRecoveryStrategy recoveryResolver;
 		private readonly ISystemContext systemContext;
 
-		public AccountManager(IAccountContext accountContext, ICryptoProvider cryptoProvider, IPasswordRecoveryStrategy recoveryResolver, ISystemContext systemContext)
+		public AccountManager(
+            IAccountContext accountContext, 
+            ICryptoProvider cryptoProvider, 
+            IPasswordRecoveryStrategy recoveryResolver, 
+            ISystemContext systemContext)
 		{
 			this.accountContext = accountContext;
 			this.cryptoProvider = cryptoProvider;

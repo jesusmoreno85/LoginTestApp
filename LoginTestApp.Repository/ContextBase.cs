@@ -15,10 +15,11 @@ namespace LoginTestApp.Repository
     public abstract class ContextBase : IContext 
     {
         protected readonly IDataMapper DataMapper;
-
+        
         #region Private Members
 
         private readonly IDbContext dbContext;
+        private IDependencyResolver dependencyResolver;
         private readonly ConcurrentDictionary<Type, IRepository> repositories;
         private readonly ConcurrentDictionary<object, object> syncDictionary;
 
@@ -26,12 +27,13 @@ namespace LoginTestApp.Repository
 
         #region Ctor
 
-        protected ContextBase(IDbContext dbContext, IDataMapper dataMapper)
+        protected ContextBase(IDbContext dbContext, IDataMapper dataMapper, IDependencyResolver dependencyResolver)
         {
             dbContext.OnSaveChanges += OnSaveChangesHandler;
 
             this.dbContext = dbContext;
             DataMapper = dataMapper;
+            this.dependencyResolver = dependencyResolver;
             repositories = new ConcurrentDictionary<Type, IRepository>();
 
             syncDictionary = new ConcurrentDictionary<object, object>();
@@ -68,7 +70,9 @@ namespace LoginTestApp.Repository
 
             if (!repositories.TryGetValue(requestedType, out repository))
             {
-                repository = (T)Activator.CreateInstance(requestedType, dbContext, DataMapper);
+                //repository = (T)Activator.CreateInstance(requestedType, (DbContext)dbContext, DataMapper);
+
+                repository = dependencyResolver.Resolve<T>((DbContext) dbContext, DataMapper);
                 repositories.TryAdd(requestedType, repository);
 
                 ((IDataInteractions)repository).OnDataChange += OnOnDataChange;

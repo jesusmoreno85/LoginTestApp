@@ -8,7 +8,7 @@ using Entities = LoginTestApp.DataAccess.Contracts.Entities;
 
 namespace LoginTestApp.Repository.Repositories
 {
-    class UsersRepository : RepositoryBase<User, int, Entities.User>, IUsersRepository
+    public class UsersRepository : RepositoryBase<User, int, Entities.User>, IUsersRepository
     {
         public UsersRepository(DbContext dbContext, IDataMapper dataMapper)
             : base(dbContext, dataMapper)

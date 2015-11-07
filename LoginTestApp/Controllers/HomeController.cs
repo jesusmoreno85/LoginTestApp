@@ -10,7 +10,7 @@ namespace LoginTestApp.Controllers
 		{
 			if (!User.Identity.IsAuthenticated)
 			{
-				return View(@"~/Views/Shared/Login.cshtml", null);    
+				return View(@"~/Views/Shared/Login2.cshtml", null);    
 			}
 			
 			return View();

@@ -188,6 +188,6 @@ $(".toggle").click(function () {
         height: "toggle",
         "padding-top": "toggle",
         "padding-bottom": "toggle",
-        opacity: "toggle"ñ-
+        opacity: "toggle"
     }, "slow");
 });

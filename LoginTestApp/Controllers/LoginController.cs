@@ -27,36 +27,36 @@ namespace LoginTestApp.Controllers
 			return View("~/Views/Shared/Login.cshtml");
 		}
 
-		//[HttpGet]
-		//public ActionResult Login(string alias, string password)
-		//{
-		//	try
-		//	{
-		//		if (accountManager.IsValidLogin(alias, password))
-		//		{
-		//			FormsAuthentication.SetAuthCookie(alias, false);
-
-		//			return GetJson(new
-		//			{
-		//				isValid = true,
-		//				redirectUrl = Url.Action("Index", "Home")
-		//			});
-		//		}
-		//	}
-		//	catch (Exception ex)
-		//	{
-		//		logger.LogException(ex);
-		//		throw;
-		//	}
-
-		//	return Json(new { isValid = false }, JsonRequestBehavior.AllowGet); ;
-		//}
-
         [HttpGet]
-        public ActionResult Login(LoginViewModel viewModel)
+        public ActionResult Login(string alias, string password)
         {
+            try
+            {
+                if (accountManager.IsValidLogin(alias, password))
+                {
+                    FormsAuthentication.SetAuthCookie(alias, false);
+
+                    return GetJson(new
+                    {
+                        isValid = true,
+                        redirectUrl = Url.Action("Index", "Home")
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogException(ex);
+                throw;
+            }
+
             return Json(new { isValid = false }, JsonRequestBehavior.AllowGet); ;
         }
+
+        //[HttpGet]
+        //public ActionResult Login(LoginViewModel viewModel)
+        //{
+        //    return Json(new { isValid = false }, JsonRequestBehavior.AllowGet); ;
+        //}
 
         [HttpGet]
 		public ActionResult Logout()
