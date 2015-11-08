@@ -70,9 +70,14 @@ namespace LoginTestApp.Repository
 
             if (!repositories.TryGetValue(requestedType, out repository))
             {
-                //repository = (T)Activator.CreateInstance(requestedType, (DbContext)dbContext, DataMapper);
+                //TODO(AngelM): Have to check this as I don't like the current approach
+                var pameterOverrides = new []
+                {
+                    new KeyValuePair<Type, object>(typeof(DbContext), (DbContext)dbContext),
+                    new KeyValuePair<Type, object>(typeof(IDataMapper), DataMapper),
+                };
 
-                repository = dependencyResolver.Resolve<T>((DbContext) dbContext, DataMapper);
+                repository = dependencyResolver.Resolve<T>(pameterOverrides);
                 repositories.TryAdd(requestedType, repository);
 
                 ((IDataInteractions)repository).OnDataChange += OnOnDataChange;

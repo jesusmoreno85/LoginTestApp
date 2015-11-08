@@ -20,8 +20,8 @@ namespace LoginTestApp.Repository.Repositories
         {
             var user = this.DbSet.SingleOrDefault(x =>
                 x.Alias == alias &&
-                isActive.HasNoValueOrEquals(x.IsActive));
-
+                (!isActive.HasValue || isActive.Value == x.IsActive));
+            
             return this.DataMapper.MapTo<User>(user);
         }
     }
