@@ -34,26 +34,26 @@
             <div class="tooltip" >Click Me</div>
         </div>
 
-            <div class="form" ng-controller="LoginCtrl">
-                <h2>Login to your account</h2>
-                <form>
-                    <input type="text" placeholder="Username" name="aliasTxt" ng-model="alias"/>
-                    <input type="password" placeholder="Password" name="passwordTxt" ng-model="password"/>
-                    <button ng-click="checkUserCredentials()" ng-disabled="isWorking">Login</button>
-                    <br/>
-                    <br/>
-                    <label style="color: red">{{messages}}</label>
-                </form>
-            </div>
+        <div class="form" ng-controller="LoginCtrl">
+            <h2>Login to your account</h2>
+            <form>
+                <input type="text" placeholder="Username" name="aliasTxt" ng-model="alias"/>
+                <input type="password" placeholder="Password" name="passwordTxt" ng-model="password"/>
+                <button ng-click="checkUserCredentials()" ng-disabled="isWorking">Login</button>
+                <br/>
+                <br/>
+                <label style="color: red">{{messages}}</label>
+            </form>
+        </div>
 
-        <div class="form">
+        <div class="form" ng-controller="AccountRegisterCtrl">
             <h2>Create an account</h2>
             <form>
-                <input type="text" placeholder="Username" />
-                <input type="password" placeholder="Password" />
-                <input type="email" placeholder="Email Address" />
-                <input type="tel" placeholder="Phone Number" />
-                <button>Register</button>
+                <input type="text" placeholder="Username" ng-model="model.Alias"/>
+                <input type="password" placeholder="Password" ng-model="model.Password"/>
+                <input type="email" placeholder="Email Address" ng-model="model.Email"/>
+                <input type="tel" placeholder="Phone Number" ng-model="model.PhoneNumber"/>
+                <button ng-click="submitRegister()">Register</button>
             </form>
         </div>
 

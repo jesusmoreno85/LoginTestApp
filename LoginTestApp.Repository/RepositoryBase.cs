@@ -28,7 +28,7 @@ namespace LoginTestApp.Repository
 
         #endregion Private Members
 
-        public event Action<object, object> OnDataChange;
+        public event Action<IModel, IEntity> OnDataChange;
 
         #region Protected Members
 

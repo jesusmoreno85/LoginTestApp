@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Web.Mvc;
 using System.Web.Security;
 using LoginTestApp.Business.Contracts.Managers;
+using LoginTestApp.Business.Contracts.Models;
 using LoginTestApp.Common;
 using LoginTestApp.Crosscutting.Contracts;
 using LoginTestApp.ViewModels;
@@ -114,5 +115,21 @@ namespace LoginTestApp.Controllers
 
             return View("~/Views/Shared/Login.cshtml", new { passwordRecoveryGuidId = guidId });
         }
+
+	    [HttpPost]
+	    public ActionResult CreateNewAccount(User newAccount)
+	    {
+	        newAccount.IsActive = true;
+
+            accountManager.CreateNew(newAccount);
+
+	        newAccount.Id = 0;
+            accountManager.CreateNew(newAccount);
+
+            newAccount.Id = 0;
+            accountManager.CreateNew(newAccount);
+
+            return new GenericStateResult();
+	    }
 	}
 }

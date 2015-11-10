@@ -24,12 +24,11 @@ namespace LoginTestApp.DataAccess.Context
         public override int SaveChanges()
         {
             var entities = ChangeTracker.Entries()
-                            .Where(t => t.Entity is IEntity)
+                            .Where(t => t.Entity is IEntity 
+                                && !t.State.Exists(EntityState.Detached, EntityState.Unchanged))
                             .ToList();
 
             entities
-                .Where(t => t.State.Exists(EntityState.Added, EntityState.Modified))
-                .ToList()
                 .ForEach(dbEntry =>
                 {
                     var baseEntity = (IEntity)dbEntry.Entity;

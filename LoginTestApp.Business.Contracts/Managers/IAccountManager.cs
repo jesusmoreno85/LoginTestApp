@@ -12,5 +12,7 @@ namespace LoginTestApp.Business.Contracts.Managers
 		void PasswordRecovery(string alias, string recoveryOption, out string errorMessage);
 
 		bool ValidatePasswordRecoveryRequest(Guid guidId, out string errorMessage);
+
+	    void CreateNew(User user);
 	}
 }

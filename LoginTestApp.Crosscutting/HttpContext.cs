@@ -11,17 +11,11 @@ namespace LoginTestApp.Crosscutting
             AppFullName = appFullName;
         }
 
-        public string AppFullName { get; private set; }
+        public string AppFullName { get; }
 
-        public string UserName
-        {
-            get { return System.Web.HttpContext.Current.User.Identity.Name; }
-        }
+        public string UserName => System.Web.HttpContext.Current.User.Identity.Name;
 
-        public DateTime DateTimeNow
-        {
-            get { return DateTime.UtcNow; }
-        }
+        public DateTime DateTimeNow => DateTime.UtcNow;
 
         public string MapPath(string virtualPath)
         {

@@ -6,7 +6,9 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LoginTestApp.Business.Contracts;
 using LoginTestApp.Crosscutting.Contracts;
+using LoginTestApp.DataAccess.Contracts;
 using LoginTestApp.DataAccess.Contracts.Context;
 using LoginTestApp.Repository.Contracts;
 
@@ -19,9 +21,9 @@ namespace LoginTestApp.Repository
         #region Private Members
 
         private readonly IDbContext dbContext;
-        private IDependencyResolver dependencyResolver;
+        private readonly IDependencyResolver dependencyResolver;
         private readonly ConcurrentDictionary<Type, IRepository> repositories;
-        private readonly ConcurrentDictionary<object, object> syncDictionary;
+        private readonly ConcurrentDictionary<IModel, IEntity> syncDictionary;
 
         #endregion Private Members
 
@@ -36,7 +38,7 @@ namespace LoginTestApp.Repository
             this.dependencyResolver = dependencyResolver;
             repositories = new ConcurrentDictionary<Type, IRepository>();
 
-            syncDictionary = new ConcurrentDictionary<object, object>();
+            syncDictionary = new ConcurrentDictionary<IModel, IEntity>();
         }
 
         #endregion Ctor
@@ -45,16 +47,17 @@ namespace LoginTestApp.Repository
 
         protected void OnSaveChangesHandler(int affectedRecords, List<DbEntityEntry> dbEntityEntries)
         {
-            foreach (var entityToSync in dbEntityEntries
-                .Where(t => t.State.Exists(EntityState.Added, EntityState.Modified))
+            foreach (var sourceEntity in dbEntityEntries
                 .Select(t => t.Entity)
                 .ToList())
             {
-                var syncItem = syncDictionary.Single(x => ReferenceEquals(x.Value, entityToSync)).Key;
+                var modelToSync = syncDictionary.Single(x => ReferenceEquals(x.Value, sourceEntity)).Key;
 
-                // ReSharper disable once RedundantAssignment
                 //It will Sync the values on Model from Entity
-                syncItem = DataMapper.MapTo(entityToSync.GetType(), syncItem.GetType());
+                modelToSync = (IModel)DataMapper.MapTo(sourceEntity, modelToSync);
+
+                IEntity entity;
+                syncDictionary.TryRemove(modelToSync, out entity);
             }
         }
 
@@ -86,11 +89,11 @@ namespace LoginTestApp.Repository
             return (T)repository;
         }
 
-        private void OnOnDataChange(object model, object entity)
+        private void OnOnDataChange(IModel model, IEntity entity)
         {
             if (syncDictionary.ContainsKey(model))
             {
-                object removedItem;
+                IEntity removedItem;
                 syncDictionary.TryRemove(model, out removedItem);
             }
 

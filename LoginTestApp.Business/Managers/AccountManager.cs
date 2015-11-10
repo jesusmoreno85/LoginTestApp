@@ -75,5 +75,11 @@ namespace LoginTestApp.Business.Managers
 		{
 			return accountContext.Users.FindUserByAlias(alias, isActive);
 		}
+
+	    public void CreateNew(User user)
+	    {
+	        accountContext.Users.Create(user);
+	        accountContext.SaveChanges();
+	    }
 	}
 }

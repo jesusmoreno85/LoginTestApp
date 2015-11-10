@@ -1,6 +1,25 @@
 ﻿
 var app = angular.module("LoginTestApp", ["angularModalService"]);
 
+app.controller("AccountRegisterCtrl", function ($scope, $http) {
+
+    $scope.model = {
+        Alias : "", 
+        Password: "",
+        Email: "",
+        PhoneNumber : ""
+    };
+
+    $scope.submitRegister = function() {
+
+        $http.post("/Login/CreateNewAccount", $scope.model)
+            .then(function(response) {
+                alert("response");
+            });
+    };
+
+});
+
 app.controller("LoginCtrl", function ($scope, $http, $rootScope) {
 
     $scope.alias = "";
@@ -177,6 +196,9 @@ app.controller("PassRecoveryDialogCtrl", function ($scope, $modalInstance) {
         }
     });
 });
+
+
+
 
 // Toggle Function
 $(".toggle").click(function () {
