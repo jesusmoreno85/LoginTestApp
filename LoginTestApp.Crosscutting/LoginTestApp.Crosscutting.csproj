@@ -105,6 +105,7 @@
     </Compile>
     <Compile Include="ExtensionMethods\IEnumerableExtensions.cs" />
     <Compile Include="ExtensionMethods\GenericExtensions.cs" />
+    <Compile Include="ExtensionMethods\ModelStateDictionaryExtensions.cs" />
     <Compile Include="ExtensionMethods\RuleBuilderExtensions.cs" />
     <Compile Include="ExtensionMethods\TypeExtensions.cs" />
     <Compile Include="HttpContext.cs" />

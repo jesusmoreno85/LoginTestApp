@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentValidation.Results;
 using LoginTestApp.Business.Contracts.Models;
 
 namespace LoginTestApp.Business.Contracts.Managers
@@ -13,6 +14,6 @@ namespace LoginTestApp.Business.Contracts.Managers
 
 		bool ValidatePasswordRecoveryRequest(Guid guidId, out string errorMessage);
 
-	    void CreateNew(User user);
+        ValidationResult CreateNew(User user);
 	}
 }

@@ -35,9 +35,10 @@ namespace LoginTestApp.Business.ModelValidators
         #region IValidator
 
         [RuleSetMapper(nameof(IsValidForCreateRules))]
-        public override ValidationResult IsValidForCreate(User instance)
+        public override bool IsValidForCreate(User instance, out ValidationResult validationResult)
         {
-            return this.ValidateMappedRuleSet(instance);
+            validationResult = ValidateMappedRuleSet(instance);
+            return validationResult.IsValid;
         }
 
         #endregion IValidator

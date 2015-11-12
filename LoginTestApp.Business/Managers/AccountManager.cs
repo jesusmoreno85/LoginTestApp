@@ -1,6 +1,8 @@
 ﻿using System;
+using FluentValidation.Results;
 using LoginTestApp.Business.Contracts.Managers;
 using LoginTestApp.Business.Contracts.Models;
+using LoginTestApp.Business.Contracts.ModelValidators;
 using LoginTestApp.Business.Contracts.Strategies;
 using LoginTestApp.Business.Properties;
 using LoginTestApp.Crosscutting.Contracts;
@@ -14,17 +16,20 @@ namespace LoginTestApp.Business.Managers
 		private readonly ICryptoProvider cryptoProvider;
 		private readonly IPasswordRecoveryStrategy recoveryResolver;
 		private readonly ISystemContext systemContext;
+	    private readonly IUserValidator userValidator;
 
-		public AccountManager(
+        public AccountManager(
             IAccountContext accountContext, 
             ICryptoProvider cryptoProvider, 
             IPasswordRecoveryStrategy recoveryResolver, 
-            ISystemContext systemContext)
+            ISystemContext systemContext, 
+            IUserValidator userValidator)
 		{
 			this.accountContext = accountContext;
 			this.cryptoProvider = cryptoProvider;
 			this.recoveryResolver = recoveryResolver;
 			this.systemContext = systemContext;
+            this.userValidator = userValidator;
 		}
 
 		public bool IsValidLogin(string alias, string password)
@@ -76,10 +81,17 @@ namespace LoginTestApp.Business.Managers
 			return accountContext.Users.FindUserByAlias(alias, isActive);
 		}
 
-	    public void CreateNew(User user)
+        public ValidationResult CreateNew(User user)
 	    {
-	        accountContext.Users.Create(user);
-	        accountContext.SaveChanges();
+            ValidationResult results;
+
+            if (userValidator.IsValidForCreate(user, out results))
+	        {
+                accountContext.Users.Create(user);
+                accountContext.SaveChanges();
+            }
+
+            return results;
 	    }
 	}
 }

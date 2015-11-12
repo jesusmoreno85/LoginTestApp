@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Web.Mvc;
 using System.Web.Security;
+using FluentValidation.Results;
 using LoginTestApp.Business.Contracts.Managers;
 using LoginTestApp.Business.Contracts.Models;
 using LoginTestApp.Business.Contracts.ModelValidators;
@@ -121,24 +122,14 @@ namespace LoginTestApp.Controllers
 	    [HttpPost]
 	    public ActionResult CreateNewAccount(User newAccount)
 	    {
-            //TODO(AngelM): Move this logic to business layer
-            var asdasd = userValidator.IsValidForCreate(newAccount);
+            //TODO(AngelM): Check if it worth to expose a Web API method
+	        newAccount.IsActive = true;
+            ValidationResult result = accountManager.CreateNew(newAccount);
 
-            //asdasd = userValidator.Validate(newAccount, ruleSet: UserValidator.CreateNewValidation2);
-
-            if (!ModelState.IsValid)
-            { 
-                newAccount.IsActive = true;
-
-                accountManager.CreateNew(newAccount);
-
-                newAccount.Id = 0;
-                accountManager.CreateNew(newAccount);
-
-                newAccount.Id = 0;
-                accountManager.CreateNew(newAccount);
-
-            }
+	        if (!result.IsValid)
+	        {
+	            ModelState.AddModelErrors(result);
+	        }
 
             return new GenericStateResult();
         }

@@ -71,17 +71,17 @@ namespace LoginTestApp.Business.ModelValidators
             cache.TryAdd(currentType, mappedMethods);
         }
 
-        public virtual ValidationResult IsValidForCreate(T instance)
+        public virtual bool IsValidForCreate(T instance, out ValidationResult validationResult)
         {
             throw new NotImplementedException();
         }
 
-        public virtual ValidationResult IsValidForUpdate(T instance)
+        public virtual bool IsValidForUpdate(T instance, out ValidationResult validationResult)
         {
             throw new NotImplementedException();
         }
 
-        public virtual ValidationResult IsValidForDelete(T instance)
+        public virtual bool IsValidForDelete(T instance, out ValidationResult validationResult)
         {
             throw new NotImplementedException();
         }

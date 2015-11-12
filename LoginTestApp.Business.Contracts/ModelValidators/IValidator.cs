@@ -12,17 +12,17 @@ namespace LoginTestApp.Business.Contracts.ModelValidators
         /// <summary>
         /// Evaluates if the given instance is valid for Create 
         /// </summary>
-        ValidationResult IsValidForCreate(T instance);
+        bool IsValidForCreate(T instance, out ValidationResult validationResult);
 
         /// <summary>
         /// Evaluates if the given instance is valid for Update
         /// </summary>
-        ValidationResult IsValidForUpdate(T instance);
+        bool IsValidForUpdate(T instance, out ValidationResult validationResult);
 
         /// <summary>
         /// Evaluates if the given instance is valid for Delete
         /// </summary>
-        ValidationResult IsValidForDelete(T instance);
+        bool IsValidForDelete(T instance, out ValidationResult validationResult);
     }
 
     /// <summary>
