@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using AutoMapper;
 using LoginTestApp.Business.Contracts.Managers;
+using LoginTestApp.Business.Contracts.ModelValidators;
 using LoginTestApp.Business.Contracts.Strategies;
 using LoginTestApp.Business.Managers;
+using LoginTestApp.Business.ModelValidators;
 using LoginTestApp.Business.Strategies;
 using LoginTestApp.Controllers;
 using LoginTestApp.Crosscutting;
@@ -40,6 +42,7 @@ namespace LoginTestApp
 
             container.RegisterType<IDependencyResolver, Crosscutting.DependencyResolver>(new InjectionConstructor(container));
 
+            //TODO(AngelM): Move this configurations to another place
             RegisterCrosscuttingConcerns(container);
 			RegisterStrategies(container);
 			RegisterManagers(container);
@@ -50,6 +53,9 @@ namespace LoginTestApp
             //Injection Constructions
             container.RegisterType<ILoginTestAppContext, LoginTestAppContext>
 				(new InjectionConstructor("LoginTestAppContext", new ResolvedParameter(typeof(ISystemContext))));
+
+
+		    container.RegisterType<IUserValidator, UserValidator>();
 
 			return container;
 		}

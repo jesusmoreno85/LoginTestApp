@@ -29,7 +29,7 @@ namespace LoginTestApp.DataAccess.Configuration
                 .HasColumnName("Email");
 
             Property(t => t.PhoneNumber)
-                .HasMaxLength(10)
+                .HasMaxLength(25)
                 .HasColumnName("PhoneNumber");
 
             Property(t => t.IsActive)

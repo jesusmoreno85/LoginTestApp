@@ -4,9 +4,9 @@ using System.Web.Mvc;
 using System.Web.Security;
 using LoginTestApp.Business.Contracts.Managers;
 using LoginTestApp.Business.Contracts.Models;
+using LoginTestApp.Business.Contracts.ModelValidators;
 using LoginTestApp.Common;
 using LoginTestApp.Crosscutting.Contracts;
-using LoginTestApp.ViewModels;
 
 namespace LoginTestApp.Controllers
 {
@@ -15,11 +15,13 @@ namespace LoginTestApp.Controllers
 	{
 		private readonly IAccountManager accountManager;
 		private readonly ILogger logger;
+        private readonly IUserValidator userValidator;
 
-		public LoginController(IAccountManager accountManager, ILogger logger)
+        public LoginController(IAccountManager accountManager, ILogger logger, IUserValidator userValidator)
 		{
 			this.accountManager = accountManager;
 			this.logger = logger;
+            this.userValidator = userValidator;
 		}
 
         [DisplayName()]
@@ -119,17 +121,26 @@ namespace LoginTestApp.Controllers
 	    [HttpPost]
 	    public ActionResult CreateNewAccount(User newAccount)
 	    {
-	        newAccount.IsActive = true;
+            //TODO(AngelM): Move this logic to business layer
+            var asdasd = userValidator.IsValidForCreate(newAccount);
 
-            accountManager.CreateNew(newAccount);
+            //asdasd = userValidator.Validate(newAccount, ruleSet: UserValidator.CreateNewValidation2);
 
-	        newAccount.Id = 0;
-            accountManager.CreateNew(newAccount);
+            if (!ModelState.IsValid)
+            { 
+                newAccount.IsActive = true;
 
-            newAccount.Id = 0;
-            accountManager.CreateNew(newAccount);
+                accountManager.CreateNew(newAccount);
+
+                newAccount.Id = 0;
+                accountManager.CreateNew(newAccount);
+
+                newAccount.Id = 0;
+                accountManager.CreateNew(newAccount);
+
+            }
 
             return new GenericStateResult();
-	    }
+        }
 	}
 }

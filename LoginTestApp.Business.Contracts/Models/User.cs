@@ -1,6 +1,7 @@
-﻿namespace LoginTestApp.Business.Contracts.Models
+﻿
+namespace LoginTestApp.Business.Contracts.Models
 {
-	public class User : ModelBase
+    public class User : ModelBase
 	{
 		public string Alias { get; set; }
 
