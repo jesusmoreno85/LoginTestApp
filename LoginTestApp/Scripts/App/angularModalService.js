@@ -22,14 +22,14 @@
                             backdrop: true,
                             keyboard: true,
                             modalFade: true,
-                            templateUrl: "/Content/Dialogs/confirmation.html"
-                        }, 
+                            templateUrl: "/Content/Dialogs/confirmation.html" 
+                        }/*, 
                         options: {
                             closeButtonText: "Close",
                             actionButtonText: "OK",
                             headerText: "Confirmation Required",
                             bodyText: "Are you sure you want to perform this action?"
-                        } 
+                        } */
                     },
                     // Waiting Configuration
                     {   
@@ -39,13 +39,13 @@
                             keyboard: true,
                             modalFade: true,
                             templateUrl: "/Content/Dialogs/waiting.html"
-                        }, 
+                        }/*, 
                         options: {
                             closeButtonText: "",
                             actionButtonText: "",
                             headerText: "",
                             bodyText: "Please wait until we finish the requested operation..."
-                        } 
+                        } */
                     }
                 ];
 
@@ -76,6 +76,7 @@
 
                     //If there is no controller defined
                     if (!tempModalOptions.controller) {
+
                         tempModalOptions.controller = function($scope, $modalInstance) {
 
                             $scope.ok = function (result) {

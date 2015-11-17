@@ -41,30 +41,24 @@ namespace LoginTestApp.Business.Strategies
 
 		static PasswordRecoveryStrategy()
 		{
+            //TODO(AngelM): Remove this logic and use the dependency resolver
 			if (StrategiesDictionary.Any()) return;
 
-			typeof(PasswordRecoveryStrategy)
-				.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
-				.Where(t => t.GetCustomAttribute<AnyDataAttribute>() != null)
-				.ToList()
-				.ForEach(methodInfo =>
-				{
-					var att = methodInfo.GetCustomAttribute<AnyDataAttribute>();
-					string key = att.Data.ToString();
+		    foreach (var methodInfo in typeof (PasswordRecoveryStrategy).GetMethodsWithAttribute<AnyDataAttribute>())
+		    {
+                string key = methodInfo.Value.Data.ToString();
 
-					if (!StrategiesDictionary.ContainsKey(key))
-					{
-						StrategiesDictionary.TryAdd(att.Data.ToString(), methodInfo);
-					}
-				});
-		}
+                if (!StrategiesDictionary.ContainsKey(key))
+                {
+                    StrategiesDictionary.TryAdd(key, methodInfo.Key);
+                }
 
-		public Action<User> GetRecoveryStrategy(string recoveryOption, out string errorMessage)
+            }
+        }
+
+        public Action<User> GetRecoveryStrategy(string recoveryOption)
 		{
-			MethodInfo methodInfo;
-			errorMessage = StrategiesDictionary.TryGetValue(recoveryOption, out methodInfo)
-				? null
-				: string.Format(Resources.RecoveryStrategyNotFound, recoveryOption);
+            MethodInfo methodInfo = StrategiesDictionary[recoveryOption];
 
 			Action<User> targetMethod = user =>
 			{

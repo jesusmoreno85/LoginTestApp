@@ -12,7 +12,7 @@ app.controller("AccountRegisterCtrl", function ($scope, $http) {
 
     $scope.submitRegister = function() {
 
-        $http.post("/Login/CreateNewAccount", $scope.model)
+        $http.post("/Account/CreateNewAccount", $scope.model)
             .then(function(response) {
                 alert("response");
             });
@@ -35,7 +35,7 @@ app.controller("LoginCtrl", function ($scope, $http, $rootScope) {
 
         $scope.isWorking = true;
 
-        $http.get("/Login/Login", {
+        $http.get("/Account/Login", {
             params: {
                 alias: $scope.alias,
                 password: $scope.password
@@ -71,27 +71,18 @@ app.controller("ForgotPassCtrl", function($scope, modalService) {
     };
 });
 
-app.controller("ForgotPassDialogCtrl", function ($scope, $modalInstance) {
+app.controller("ForgotPassDialogCtrl", function ($scope, $rootScope, $http, $modalInstance) {
 
     $scope.helpType = "";
     $scope.isRequestInProgress = false;
     $scope.messages = "";
     $scope.okDisabled = true;
 
-    $scope.headerText = "Forgot your password?";
-    $scope.bodyText = "We can help you for sure, please choose the type of help you want.";
-    $scope.bodyTextFooter = "We are going to send an email to your registered account, make sure you have access to it.";
-
-    $scope.recoveryOptions = [
-        { name: "ResetLink", description: "Send a Reset Link" },
-        { name: "RecoveryClue", description: "Send a Recovery Clue" }
-    ];
-
     $scope.ok = function(result) {
-
+        
         $scope.isRequestInProgress = true;
 
-        $http.get("/Login/PasswordRecoveryRequest", {
+        $http.get("/Account/PasswordRecoveryRequest", {
                 params: {
                     alias: $rootScope.alias,
                     recoveryOption: $scope.helpType

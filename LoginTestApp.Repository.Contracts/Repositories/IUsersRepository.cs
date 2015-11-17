@@ -4,6 +4,6 @@ namespace LoginTestApp.Repository.Contracts.Repositories
 {
 	public interface IUsersRepository : IRepository<User, int>
 	{
-        User FindUserByAlias(string alias, bool? isActive = true);
+        User FindUserByAlias(string alias, bool? isActive = null);
     }
 }

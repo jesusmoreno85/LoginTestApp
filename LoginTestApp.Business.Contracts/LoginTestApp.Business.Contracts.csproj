@@ -75,6 +75,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessOperation\BusinessMessage.cs" />
+    <Compile Include="BusinessOperation\BusinessMessageLevel.cs" />
+    <Compile Include="BusinessOperation\BusinessMessageSource.cs" />
+    <Compile Include="BusinessOperation\BusinessOperationResult.cs" />
     <Compile Include="IModel.cs" />
     <Compile Include="Managers\IAccountManager.cs" />
     <Compile Include="Models\DynamicLink.cs" />
@@ -83,6 +87,7 @@
     <Compile Include="ModelValidators\IValidator.cs" />
     <Compile Include="ModelValidators\IUserValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ModelStateMessage.cs" />
     <Compile Include="Strategies\IPasswordRecoveryStrategy.cs" />
   </ItemGroup>
   <ItemGroup>

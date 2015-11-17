@@ -5,6 +5,6 @@ namespace LoginTestApp.Business.Contracts.Strategies
 {
     public interface IPasswordRecoveryStrategy
     {
-        Action<User> GetRecoveryStrategy(string recoveryOption, out string errorMessage);
+        Action<User> GetRecoveryStrategy(string recoveryOption);
     }
 }

@@ -71,6 +71,11 @@ namespace LoginTestApp.Business.ModelValidators
             cache.TryAdd(currentType, mappedMethods);
         }
 
+        //public virtual bool IsValidForFind(T instance, out ValidationResult validationResult)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         public virtual bool IsValidForCreate(T instance, out ValidationResult validationResult)
         {
             throw new NotImplementedException();

@@ -79,6 +79,15 @@ namespace LoginTestApp.Business.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid value.
+        /// </summary>
+        internal static string InvalidValue {
+            get {
+                return ResourceManager.GetString("InvalidValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There is no recovery strategy for the recovery option &apos;{0}&apos;.
         /// </summary>
         internal static string RecoveryStrategyNotFound {
@@ -88,11 +97,11 @@ namespace LoginTestApp.Business.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The user alias wasn&apos;t found.
+        ///   Looks up a localized string similar to User not found.
         /// </summary>
-        internal static string UserAliasNotFound {
+        internal static string UserNotFound {
             get {
-                return ResourceManager.GetString("UserAliasNotFound", resourceCulture);
+                return ResourceManager.GetString("UserNotFound", resourceCulture);
             }
         }
     }

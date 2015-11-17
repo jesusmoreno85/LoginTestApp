@@ -9,6 +9,11 @@ namespace LoginTestApp.Business.Contracts.ModelValidators
     public interface IValidator<T>
         where T : class, IModel
     {
+        ///// <summary>
+        ///// Evaluates if the given instance is valid for Create 
+        ///// </summary>
+        //bool IsValidForFind(T instance, out ValidationResult validationResult);
+
         /// <summary>
         /// Evaluates if the given instance is valid for Create 
         /// </summary>

@@ -1,19 +1,19 @@
 ﻿using System;
-using FluentValidation.Results;
+using LoginTestApp.Business.Contracts.BusinessOperation;
 using LoginTestApp.Business.Contracts.Models;
 
 namespace LoginTestApp.Business.Contracts.Managers
 {
 	public interface IAccountManager
-	{
+    {
 		bool IsValidLogin(string alias, string password);
 
-		User FindUserByAlias(string alias, bool isActive = true);
+        BusinessOperationResult<User> FindUserByAlias(string alias, bool? isActive = true);
 
-		void PasswordRecovery(string alias, string recoveryOption, out string errorMessage);
+        BusinessOperationResult<bool> PasswordRecovery(string alias, string recoveryOption);
 
-		bool ValidatePasswordRecoveryRequest(Guid guidId, out string errorMessage);
+        BusinessOperationResult<bool> ValidatePasswordRecoveryRequest(Guid guidId);
 
-        ValidationResult CreateNew(User user);
+        BusinessOperationResult<bool> CreateNew(User user);
 	}
 }

@@ -123,11 +123,14 @@
   <data name="DynamicLinkNotFound" xml:space="preserve">
     <value>Link no encontrado</value>
   </data>
+  <data name="InvalidValue" xml:space="preserve">
+    <value>Invalid value</value>
+  </data>
   <data name="RecoveryStrategyNotFound" xml:space="preserve">
     <value>There is no recovery strategy for the recovery option '{0}'</value>
     <comment>{0} - recovery option name</comment>
   </data>
-  <data name="UserAliasNotFound" xml:space="preserve">
-    <value>The user alias wasn't found</value>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>User not found</value>
   </data>
 </root>

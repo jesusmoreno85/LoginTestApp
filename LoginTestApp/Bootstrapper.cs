@@ -73,7 +73,7 @@ namespace LoginTestApp
 
 		private static void RegisterControllers(IUnityContainer container)
 		{
-			container.RegisterType<IController, LoginController>();
+			container.RegisterType<IController, AccountController>();
 		}
 
 		private static void RegisterManagers(IUnityContainer container)

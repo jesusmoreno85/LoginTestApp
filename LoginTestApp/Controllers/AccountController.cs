@@ -2,27 +2,24 @@
 using System.ComponentModel;
 using System.Web.Mvc;
 using System.Web.Security;
-using FluentValidation.Results;
+using LoginTestApp.Business.Contracts.BusinessOperation;
 using LoginTestApp.Business.Contracts.Managers;
 using LoginTestApp.Business.Contracts.Models;
-using LoginTestApp.Business.Contracts.ModelValidators;
 using LoginTestApp.Common;
 using LoginTestApp.Crosscutting.Contracts;
 
 namespace LoginTestApp.Controllers
 {
 	[AllowAnonymous]
-	public class LoginController : ControllerBase
+	public class AccountController : ControllerBase
 	{
 		private readonly IAccountManager accountManager;
 		private readonly ILogger logger;
-        private readonly IUserValidator userValidator;
 
-        public LoginController(IAccountManager accountManager, ILogger logger, IUserValidator userValidator)
+        public AccountController(IAccountManager accountManager, ILogger logger)
 		{
 			this.accountManager = accountManager;
 			this.logger = logger;
-            this.userValidator = userValidator;
 		}
 
         [DisplayName()]
@@ -82,12 +79,11 @@ namespace LoginTestApp.Controllers
 		{
 			try
 			{
-				string errorMessage;
-				accountManager.PasswordRecovery(alias, recoveryOption, out errorMessage);
+                BusinessOperationResult<bool> result = accountManager.PasswordRecovery(alias, recoveryOption);
 
-				if (!string.IsNullOrWhiteSpace(errorMessage))
+				if (result.IsError)
 				{
-					return new GenericStateResult(true, errorMessage);
+					return new GenericStateResult(result.Messages);
 				}
 			}
 			catch (Exception ex)
@@ -104,12 +100,13 @@ namespace LoginTestApp.Controllers
 		{
 			try
 			{
-				string errorMessage;
-				if (!accountManager.ValidatePasswordRecoveryRequest(guidId, out errorMessage))
-				{
-					return new GenericStateResult(true, errorMessage);
-				}
-			}
+			    BusinessOperationResult<bool> result = accountManager.ValidatePasswordRecoveryRequest(guidId);
+
+                if (result.IsError)
+                {
+                    return new GenericStateResult(result.Messages);
+                }
+            }
 			catch (Exception ex)
 			{
 				logger.LogException(ex);
@@ -124,12 +121,13 @@ namespace LoginTestApp.Controllers
 	    {
             //TODO(AngelM): Check if it worth to expose a Web API method
 	        newAccount.IsActive = true;
-            ValidationResult result = accountManager.CreateNew(newAccount);
 
-	        if (!result.IsValid)
-	        {
-	            ModelState.AddModelErrors(result);
-	        }
+	        BusinessOperationResult<bool> result = accountManager.CreateNew(newAccount);
+
+            if (result.IsError)
+            {
+                return new GenericStateResult(result.Messages);
+            }
 
             return new GenericStateResult();
         }

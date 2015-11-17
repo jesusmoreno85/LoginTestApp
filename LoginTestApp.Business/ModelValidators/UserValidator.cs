@@ -12,11 +12,13 @@ namespace LoginTestApp.Business.ModelValidators
     /// </summary>
     public class UserValidator : ValidatorBase<User>, IUserValidator
     {
+        private const int AliasMaxLength = 30;
+
         #region RuleSets
 
         private void IsValidForCreateRules()
         {
-            RuleFor(x => x.Alias).NotEmpty(30);
+            RuleFor(x => x.Alias).NotEmpty(AliasMaxLength);
 
             RuleFor(x => x.Password).NotEmpty(30);
 
