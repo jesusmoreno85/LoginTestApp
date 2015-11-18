@@ -11,9 +11,9 @@ namespace LoginTestApp.Crosscutting
 
         public Logger(string applicationName, string targetLog)
         {
-            if (applicationName == null) throw new ArgumentNullException("applicationName");
+            if (applicationName == null) throw new ArgumentNullException(nameof(applicationName));
 
-            if (targetLog == null) throw new ArgumentNullException("targetLog");
+            if (targetLog == null) throw new ArgumentNullException(nameof(targetLog));
 
             //Everything is OK with the given parameters
             this.applicationName = applicationName;

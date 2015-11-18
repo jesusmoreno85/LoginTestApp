@@ -20,6 +20,7 @@ using LoginTestApp.Repository.Contracts.Repositories;
 using LoginTestApp.Repository.MappingConfiguration;
 using LoginTestApp.Repository.Repositories;
 using Microsoft.Practices.Unity;
+using Microsoft.Practices.Unity.Configuration;
 using Unity.Mvc3;
 using DependencyResolver = System.Web.Mvc.DependencyResolver;
 using IConfigurationProvider = LoginTestApp.Crosscutting.Contracts.IConfigurationProvider;
@@ -39,59 +40,22 @@ namespace LoginTestApp
 		private static IUnityContainer BuildUnityContainer()
 		{
 			var container = new UnityContainer();
+		    container.LoadConfiguration();
 
             container.RegisterType<IDependencyResolver, Crosscutting.DependencyResolver>(new InjectionConstructor(container));
 
             //TODO(AngelM): Move this configurations to another place
             RegisterCrosscuttingConcerns(container);
-			RegisterStrategies(container);
-			RegisterManagers(container);
-            RegisterDomainContexts(container);
-            RegisterControllers(container);
-            RegisterRepositories(container);
-
-            //Injection Constructions
-            container.RegisterType<ILoginTestAppContext, LoginTestAppContext>
-				(new InjectionConstructor("LoginTestAppContext", new ResolvedParameter(typeof(ISystemContext))));
-
-
-		    container.RegisterType<IUserValidator, UserValidator>();
 
 			return container;
-		}
 
-        private static void RegisterRepositories(UnityContainer container)
-        {
-            container.RegisterType<IDynamicLinksRepository, DynamicLinksRepository>();
-            container.RegisterType<IUsersRepository, UsersRepository>();
+
+            container.RegisterType<IController, AccountController>();
         }
 
-        private static void RegisterStrategies(UnityContainer container)
-		{
-			container.RegisterType<IPasswordRecoveryStrategy, PasswordRecoveryStrategy>();
-        }
-
-		private static void RegisterControllers(IUnityContainer container)
-		{
-			container.RegisterType<IController, AccountController>();
-		}
-
-		private static void RegisterManagers(IUnityContainer container)
-		{
-			container.RegisterType<IAccountManager, AccountManager>();
-		}
-
-        private static void RegisterDomainContexts(IUnityContainer container)
-        {
-            container.RegisterType<IAccountContext, AccountContext>();
-        }
 
         private static void RegisterCrosscuttingConcerns(IUnityContainer container)
 		{
-			container.RegisterType<ILogger, Logger>(new InjectionConstructor("LoginTestApp", "Application"));
-			container.RegisterType<ISystemContext, HttpContext>(new InjectionConstructor("App Full Name"));
-			container.RegisterType<ICryptoProvider, CryptoProvider>();
-
 			container.RegisterType<IConfigurationProvider, ConfigurationProvider>();
 
 			var configProvider = container.Resolve<IConfigurationProvider>();
