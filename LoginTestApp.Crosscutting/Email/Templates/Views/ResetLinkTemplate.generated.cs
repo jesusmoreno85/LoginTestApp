@@ -23,7 +23,7 @@ namespace LoginTestApp.Crosscutting.Email.Templates.Views
 
         #line 4 "..\..\Email\Templates\Views\ResetLinkTemplate.cshtml"
 
-    public LoginTestApp.Crosscutting.EMail.Templates.Models.ResetLinkModel Model { get; set; }
+    public LoginTestApp.Crosscutting.Email.Templates.Models.ResetLinkModel Model { get; set; }
 
     public string Subject
     {

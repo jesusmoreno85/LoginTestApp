@@ -23,7 +23,7 @@ namespace LoginTestApp.Crosscutting.Email.Templates.Views
 
         #line 4 "..\..\Email\Templates\Views\RecoveryClueTemplate.cshtml"
 
-    public LoginTestApp.Crosscutting.EMail.Templates.Models.RecoveryClueModel Model { get; set; }
+    public LoginTestApp.Crosscutting.Email.Templates.Models.RecoveryClueModel Model { get; set; }
 
     public string Subject
     {

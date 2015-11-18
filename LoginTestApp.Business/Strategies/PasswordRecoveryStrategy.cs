@@ -5,12 +5,11 @@ using System.Net.Mail;
 using System.Reflection;
 using LoginTestApp.Business.Contracts.Models;
 using LoginTestApp.Business.Contracts.Strategies;
-using LoginTestApp.Business.Properties;
 using LoginTestApp.Crosscutting;
 using LoginTestApp.Crosscutting.Contracts;
 using LoginTestApp.Crosscutting.Contracts.Email;
 using LoginTestApp.Crosscutting.Email.Templates.Views;
-using LoginTestApp.Crosscutting.EMail.Templates.Models;
+using LoginTestApp.Crosscutting.Email.Templates.Models;
 using LoginTestApp.Repository.Contracts;
 
 namespace LoginTestApp.Business.Strategies

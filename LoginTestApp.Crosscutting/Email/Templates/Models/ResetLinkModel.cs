@@ -1,4 +1,4 @@
-﻿namespace LoginTestApp.Crosscutting.EMail.Templates.Models
+﻿namespace LoginTestApp.Crosscutting.Email.Templates.Models
 {
     public class RecoveryClueModel 
     {
