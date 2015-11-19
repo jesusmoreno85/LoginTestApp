@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using FluentValidation;
 using FluentValidation.Results;
 using LoginTestApp.Business.Contracts;
+using LoginTestApp.Business.Contracts.BusinessOperation;
 using LoginTestApp.Crosscutting.Contracts.Attributes;
 
 namespace LoginTestApp.Business.ModelValidators
@@ -25,6 +26,8 @@ namespace LoginTestApp.Business.ModelValidators
                 LoadMappingsFromTypeDefinition(currentType);
             }
         }
+
+        #region Private Methods
 
         /// <summary>
         /// It tries to load the mappings from the cache
@@ -71,29 +74,69 @@ namespace LoginTestApp.Business.ModelValidators
             cache.TryAdd(currentType, mappedMethods);
         }
 
+        #endregion Private Methods
+
+        #region IValidator
+
         //public virtual bool IsValidForFind(T instance, out ValidationResult validationResult)
         //{
         //    throw new NotImplementedException();
         //}
 
-        public virtual bool IsValidForCreate(T instance, out ValidationResult validationResult)
+        public virtual BusinessValidationResult ValidateForCreate(T instance)
         {
             throw new NotImplementedException();
         }
 
-        public virtual bool IsValidForUpdate(T instance, out ValidationResult validationResult)
+        public virtual BusinessValidationResult ValidateForUpdate(T instance)
         {
             throw new NotImplementedException();
         }
 
-        public virtual bool IsValidForDelete(T instance, out ValidationResult validationResult)
+        public virtual BusinessValidationResult ValidateForDelete(T instance)
         {
             throw new NotImplementedException();
         }
 
+        #endregion IValidator
+
+        #region Protected Methods
+
+        /// <summary>
+        /// Performs a rule validation set
+        /// </summary>
+        /// <param name="instance">Instance to validate</param>
+        /// <param name="ruleSetName">Ruleset name to perform</param>
+        /// <returns>The validation findings</returns>
         protected ValidationResult ValidateMappedRuleSet(T instance, [CallerMemberName] string ruleSetName = null)
         {
+            if(string.IsNullOrWhiteSpace(ruleSetName)) throw new ArgumentNullException(nameof(ruleSetName));
+
             return this.Validate(instance, ruleSet: ruleSetName);
         }
+
+        /// <summary>
+        /// Converts a <see cref="ValidationResult"/> into <see cref="BusinessValidationResult"/>
+        /// </summary>
+        /// <param name="validationResult">The validation results to map</param>
+        protected BusinessValidationResult MapToBusinessValidationResult(ValidationResult validationResult)
+        {
+            BusinessValidationResult result = new BusinessValidationResult();
+
+            foreach (var validationFailure in validationResult.Errors)
+            {
+                result.Messages.Add(new ModelStateMessage
+                {
+                    Level = BusinessMessageLevel.Error,
+                    PropertyName = validationFailure.PropertyName,
+                    AttemptedValue = validationFailure.AttemptedValue,
+                    Message = validationFailure.ErrorMessage
+                });
+            }
+
+            return result;
+        }
+
+        #endregion Protected Methods
     }
 }

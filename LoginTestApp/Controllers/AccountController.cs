@@ -131,5 +131,19 @@ namespace LoginTestApp.Controllers
 
             return new GenericStateResult();
         }
-	}
+
+        [HttpPost]
+        public ActionResult UpdateAccount(User newAccount)
+        {
+            //TODO(AngelM): Check if it worth to expose a Web API method
+            BusinessOperationResult<bool> result = accountManager.CreateNew(newAccount);
+
+            if (result.IsError)
+            {
+                return new GenericStateResult(result.Messages);
+            }
+
+            return new GenericStateResult();
+        }
+    }
 }

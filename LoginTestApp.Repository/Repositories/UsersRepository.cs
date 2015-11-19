@@ -24,5 +24,14 @@ namespace LoginTestApp.Repository.Repositories
             
             return this.DataMapper.MapTo<User>(user);
         }
+
+        public bool IsAliasAvailable(string alias, int id = 0)
+        {
+            bool isTaken = this.DbSet
+                            .Any(x => x.Alias == alias
+                                && x.Id != 0);
+
+            return !isTaken;
+        }
     }
 }

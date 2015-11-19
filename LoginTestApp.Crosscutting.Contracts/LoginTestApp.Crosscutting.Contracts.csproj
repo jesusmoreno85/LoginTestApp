@@ -42,7 +42,6 @@
   <ItemGroup>
     <Compile Include="Attributes\LocalizationDisplayNameAttribute.cs" />
     <Compile Include="Attributes\RuleSetMapperAttribute.cs" />
-    <Compile Include="Enums\PasswordRecoveryOptions.cs" />
     <Compile Include="IConfigurationProvider.cs" />
     <Compile Include="IDataMapper.cs" />
     <Compile Include="Email\IEmailSender.cs" />

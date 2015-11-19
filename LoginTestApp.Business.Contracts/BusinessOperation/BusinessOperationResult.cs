@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using FluentValidation.Results;
 
 namespace LoginTestApp.Business.Contracts.BusinessOperation
 {
@@ -54,22 +53,6 @@ namespace LoginTestApp.Business.Contracts.BusinessOperation
             });
         }
 
-        public void FillMessages(ValidationResult validationResult)
-        {
-            Messages.Clear();
-
-            foreach (var validationFailure in validationResult.Errors)
-            {
-                Messages.Add(new ModelStateMessage
-                {
-                    Level = BusinessMessageLevel.Error,
-                    PropertyName = validationFailure.PropertyName, 
-                    AttemptedValue = validationFailure.AttemptedValue, 
-                    Message = validationFailure.ErrorMessage
-                });
-            }
-        }
-
         public BusinessOperationResult<bool> CastToBooleanResult()
         {
             var result = new BusinessOperationResult<bool>(IsError);
@@ -85,12 +68,17 @@ namespace LoginTestApp.Business.Contracts.BusinessOperation
 
     public class BusinessOperationResult
     {
-        public static BusinessOperationResult<bool> CreateNew(ValidationResult validationResult)
+        public static BusinessOperationResult<bool> CreateNewBoolean(BusinessValidationResult validationResult)
+        {
+            var result = new BusinessOperationResult<bool>(validationResult.Messages, validationResult.IsValid);
+
+            return result;
+        }
+
+        public static BusinessOperationResult<bool> CreateNewBooleanError(BusinessMessageSource source, string message)
         {
             var result = new BusinessOperationResult<bool>();
-            result.FillMessages(validationResult);
-
-            result.OperationResult = validationResult.IsValid;
+            result.AddError(source, message);
 
             return result;
         }

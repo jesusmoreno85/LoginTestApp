@@ -1,5 +1,4 @@
 ﻿using System;
-using FluentValidation.Results;
 using LoginTestApp.Business.Contracts.BusinessOperation;
 using LoginTestApp.Business.Contracts.Managers;
 using LoginTestApp.Business.Contracts.Models;
@@ -13,18 +12,17 @@ namespace LoginTestApp.Business.Managers
 {
 	public class AccountManager : IAccountManager
 	{
-		private readonly IAccountContext accountContext;
+        #region Ctor
+
+        private readonly IAccountContext accountContext;
 		private readonly ICryptoProvider cryptoProvider;
 		private readonly IPasswordRecoveryStrategy recoveryResolver;
 		private readonly ISystemContext systemContext;
 	    private readonly IUserValidator userValidator;
 
         public AccountManager(
-            IAccountContext accountContext, 
-            ICryptoProvider cryptoProvider, 
-            IPasswordRecoveryStrategy recoveryResolver, 
-            ISystemContext systemContext, 
-            IUserValidator userValidator)
+            IAccountContext accountContext, ICryptoProvider cryptoProvider, IPasswordRecoveryStrategy recoveryResolver, 
+            ISystemContext systemContext, IUserValidator userValidator)
 		{
 			this.accountContext = accountContext;
 			this.cryptoProvider = cryptoProvider;
@@ -32,6 +30,10 @@ namespace LoginTestApp.Business.Managers
 			this.systemContext = systemContext;
             this.userValidator = userValidator;
 		}
+
+        #endregion Ctor
+
+        #region IAccountManager
 
         public bool IsValidLogin(string alias, string password)
 		{
@@ -71,7 +73,11 @@ namespace LoginTestApp.Business.Managers
 			{
                 result.AddError(BusinessMessageSource.BusinessRule, Resources.DynamicLinkExpired);
 			}
-			else
+            else if (link.IsConsumed)
+            {
+                result.AddError(BusinessMessageSource.BusinessRule, Resources.DynamicLinkConsumed);
+            }
+            else
 			{
 			    result.OperationResult = true;
 			}
@@ -104,17 +110,34 @@ namespace LoginTestApp.Business.Managers
 
 	    public BusinessOperationResult<bool> CreateNew(User user)
 	    {
-            ValidationResult results;
+	        BusinessValidationResult results = userValidator.ValidateForCreate(user);
 
-            if (userValidator.IsValidForCreate(user, out results))
-	        {
-                accountContext.Users.Create(user);
-                accountContext.SaveChanges();
+	        if (!results.IsValid) return BusinessOperationResult.CreateNewBoolean(results);
 
-	            return new BusinessOperationResult<bool>(true);
-	        }
+            //Everything fine
+	        accountContext.Users.Create(user);
+	        accountContext.SaveChanges();
 
-            return BusinessOperationResult.CreateNew(results); 
+            //Success
+            return new BusinessOperationResult<bool>(true);
 	    }
-	}
+
+        public BusinessOperationResult<bool> Update(User user)
+        {
+            BusinessValidationResult results = userValidator.ValidateForUpdate(user);
+
+            if (!results.IsValid) return BusinessOperationResult.CreateNewBoolean(results);
+
+            //Everything fine
+            accountContext.Users.Update(user);
+
+            //Getting into this indicates there was an issue
+            if (accountContext.SaveChanges() == 0) return BusinessOperationResult.CreateNewBooleanError(BusinessMessageSource.BusinessRule, Resources.UserNotFound);
+
+            //Success
+            return new BusinessOperationResult<bool>(true);
+        }
+
+        #endregion IAccountManager
+    }
 }

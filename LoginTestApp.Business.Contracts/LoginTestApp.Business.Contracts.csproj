@@ -79,6 +79,8 @@
     <Compile Include="BusinessOperation\BusinessMessageLevel.cs" />
     <Compile Include="BusinessOperation\BusinessMessageSource.cs" />
     <Compile Include="BusinessOperation\BusinessOperationResult.cs" />
+    <Compile Include="BusinessOperation\BusinessValidationResult.cs" />
+    <Compile Include="Enums\PasswordRecoveryOption.cs" />
     <Compile Include="IModel.cs" />
     <Compile Include="Managers\IAccountManager.cs" />
     <Compile Include="Models\DynamicLink.cs" />

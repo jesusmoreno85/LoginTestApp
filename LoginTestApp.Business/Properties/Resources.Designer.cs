@@ -61,6 +61,15 @@ namespace LoginTestApp.Business.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The link has been already consumed.
+        /// </summary>
+        internal static string DynamicLinkConsumed {
+            get {
+                return ResourceManager.GetString("DynamicLinkConsumed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to El link a expirado.
         /// </summary>
         internal static string DynamicLinkExpired {
@@ -88,11 +97,29 @@ namespace LoginTestApp.Business.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Id value is not valid.
+        /// </summary>
+        internal static string NotValidIdValueForUpdate {
+            get {
+                return ResourceManager.GetString("NotValidIdValueForUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There is no recovery strategy for the recovery option &apos;{0}&apos;.
         /// </summary>
         internal static string RecoveryStrategyNotFound {
             get {
                 return ResourceManager.GetString("RecoveryStrategyNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User alias is not available.
+        /// </summary>
+        internal static string UserAliasNotAvailable {
+            get {
+                return ResourceManager.GetString("UserAliasNotAvailable", resourceCulture);
             }
         }
         

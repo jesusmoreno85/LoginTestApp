@@ -1,4 +1,4 @@
-﻿using FluentValidation.Results;
+﻿using LoginTestApp.Business.Contracts.BusinessOperation;
 
 namespace LoginTestApp.Business.Contracts.ModelValidators
 {
@@ -17,17 +17,17 @@ namespace LoginTestApp.Business.Contracts.ModelValidators
         /// <summary>
         /// Evaluates if the given instance is valid for Create 
         /// </summary>
-        bool IsValidForCreate(T instance, out ValidationResult validationResult);
+        BusinessValidationResult ValidateForCreate(T instance);
 
         /// <summary>
         /// Evaluates if the given instance is valid for Update
         /// </summary>
-        bool IsValidForUpdate(T instance, out ValidationResult validationResult);
+        BusinessValidationResult ValidateForUpdate(T instance);
 
         /// <summary>
         /// Evaluates if the given instance is valid for Delete
         /// </summary>
-        bool IsValidForDelete(T instance, out ValidationResult validationResult);
+        BusinessValidationResult ValidateForDelete(T instance);
     }
 
     /// <summary>
