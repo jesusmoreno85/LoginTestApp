@@ -21,7 +21,7 @@ namespace LoginTestApp.Repository
         #region Private Members
 
         private readonly IDbContext dbContext;
-        private readonly IDependencyResolver dependencyResolver;
+        private readonly IRepositoryFactory repositoryFactory;
         private readonly ConcurrentDictionary<Type, IRepository> repositories;
         private readonly ConcurrentDictionary<IModel, IEntity> syncDictionary;
 
@@ -29,13 +29,13 @@ namespace LoginTestApp.Repository
 
         #region Ctor
 
-        protected ContextBase(IDbContext dbContext, IDataMapper dataMapper, IDependencyResolver dependencyResolver)
+        protected ContextBase(IDbContext dbContext, IDataMapper dataMapper, IRepositoryFactory repositoryFactory)
         {
             dbContext.OnSaveChanges += OnSaveChangesHandler;
 
             this.dbContext = dbContext;
             DataMapper = dataMapper;
-            this.dependencyResolver = dependencyResolver;
+            this.repositoryFactory = repositoryFactory;
             repositories = new ConcurrentDictionary<Type, IRepository>();
 
             syncDictionary = new ConcurrentDictionary<IModel, IEntity>();
@@ -73,14 +73,7 @@ namespace LoginTestApp.Repository
 
             if (!repositories.TryGetValue(requestedType, out repository))
             {
-                //TODO(AngelM): Have to check this as I don't like the current approach
-                var pameterOverrides = new []
-                {
-                    new KeyValuePair<Type, object>(typeof(DbContext), (DbContext)dbContext),
-                    new KeyValuePair<Type, object>(typeof(IDataMapper), DataMapper),
-                };
-
-                repository = dependencyResolver.Resolve<T>(pameterOverrides);
+                repository = repositoryFactory.Resolve<T>((DbContext)dbContext, DataMapper);
                 repositories.TryAdd(requestedType, repository);
 
                 ((IDataInteractions)repository).OnDataChange += OnOnDataChange;

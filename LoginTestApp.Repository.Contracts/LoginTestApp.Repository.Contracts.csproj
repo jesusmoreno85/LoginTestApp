@@ -30,7 +30,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Xml.Linq" />
@@ -43,6 +52,7 @@
     <Compile Include="IContext.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IAccountContext.cs" />
+    <Compile Include="IRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\IDynamicLinksRepository.cs" />
     <Compile Include="Repositories\IUsersRepository.cs" />
@@ -52,13 +62,20 @@
       <Project>{F14B2216-552A-4776-95A7-E45490CDBCDD}</Project>
       <Name>LoginTestApp.Business.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LoginTestApp.Crosscutting.Contracts\LoginTestApp.Crosscutting.Contracts.csproj">
+      <Project>{6E2A3442-706B-4ED3-AC16-0C60AD1B0D39}</Project>
+      <Name>LoginTestApp.Crosscutting.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LoginTestApp.DataAccess.Contracts\LoginTestApp.DataAccess.Contracts.csproj">
       <Project>{ACB9EEB2-3784-4669-B1A4-050DE7FB9466}</Project>
       <Name>LoginTestApp.DataAccess.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

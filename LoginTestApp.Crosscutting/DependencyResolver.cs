@@ -6,6 +6,7 @@ using Microsoft.Practices.Unity;
 
 namespace LoginTestApp.Crosscutting
 {
+    //TODO(AngelM): We should probably remove this stuff
     public class DependencyResolver : IDependencyResolver
     {
         private readonly IUnityContainer container;
