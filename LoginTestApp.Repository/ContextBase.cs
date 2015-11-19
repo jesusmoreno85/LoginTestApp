@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LoginTestApp.Business.Contracts;
 using LoginTestApp.Crosscutting.Contracts;
+using LoginTestApp.Crosscutting.Contracts.InversionOfControl;
 using LoginTestApp.DataAccess.Contracts;
 using LoginTestApp.DataAccess.Contracts.Context;
 using LoginTestApp.Repository.Contracts;
@@ -21,7 +22,7 @@ namespace LoginTestApp.Repository
         #region Private Members
 
         private readonly IDbContext dbContext;
-        private readonly IRepositoryFactory repositoryFactory;
+        private readonly IDependencyResolver dependencyResolver;
         private readonly ConcurrentDictionary<Type, IRepository> repositories;
         private readonly ConcurrentDictionary<IModel, IEntity> syncDictionary;
 
@@ -29,13 +30,13 @@ namespace LoginTestApp.Repository
 
         #region Ctor
 
-        protected ContextBase(IDbContext dbContext, IDataMapper dataMapper, IRepositoryFactory repositoryFactory)
+        protected ContextBase(IDbContext dbContext, IDataMapper dataMapper, IDependencyResolver dependencyResolver)
         {
             dbContext.OnSaveChanges += OnSaveChangesHandler;
 
             this.dbContext = dbContext;
             DataMapper = dataMapper;
-            this.repositoryFactory = repositoryFactory;
+            this.dependencyResolver = dependencyResolver;
             repositories = new ConcurrentDictionary<Type, IRepository>();
 
             syncDictionary = new ConcurrentDictionary<IModel, IEntity>();
@@ -45,6 +46,11 @@ namespace LoginTestApp.Repository
 
         #region Protected Methods
 
+        /// <summary>
+        /// Refreshes the Model objects when a change operation was perform in the corresponding entity object
+        /// </summary>
+        /// <param name="affectedRecords">Records affected by last operation</param>
+        /// <param name="dbEntityEntries">The affected entities</param>
         protected void OnSaveChangesHandler(int affectedRecords, List<DbEntityEntry> dbEntityEntries)
         {
             foreach (var sourceEntity in dbEntityEntries
@@ -73,16 +79,24 @@ namespace LoginTestApp.Repository
 
             if (!repositories.TryGetValue(requestedType, out repository))
             {
-                repository = repositoryFactory.Resolve<T>((DbContext)dbContext, DataMapper);
+                repository = dependencyResolver.Resolve<T>(
+                    new DependencyOverride(typeof(DbContext), dbContext),
+                    new DependencyOverride(DataMapper));
+
                 repositories.TryAdd(requestedType, repository);
 
-                ((IDataInteractions)repository).OnDataChange += OnOnDataChange;
+                ((IDataInteractions)repository).OnDataChange += OnDataChangeHandler;
             }
 
             return (T)repository;
         }
 
-        private void OnOnDataChange(IModel model, IEntity entity)
+        /// <summary>
+        /// Catches a requested data change and keeps a reference of the Model and its corresponding db entity
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="entity"></param>
+        private void OnDataChangeHandler(IModel model, IEntity entity)
         {
             if (syncDictionary.ContainsKey(model))
             {

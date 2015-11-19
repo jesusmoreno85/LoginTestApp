@@ -6,7 +6,9 @@ using LoginTestApp.Business.Contracts.ModelValidators;
 using LoginTestApp.Business.Contracts.Strategies;
 using LoginTestApp.Business.Properties;
 using LoginTestApp.Crosscutting.Contracts;
+using LoginTestApp.Crosscutting.Contracts.InversionOfControl;
 using LoginTestApp.Repository.Contracts;
+using LoginTestApp.Repository.Contracts.Repositories;
 
 namespace LoginTestApp.Business.Managers
 {
@@ -22,13 +24,15 @@ namespace LoginTestApp.Business.Managers
 
         public AccountManager(
             IAccountContext accountContext, ICryptoProvider cryptoProvider, IPasswordRecoveryStrategy recoveryResolver, 
-            ISystemContext systemContext, IUserValidator userValidator)
+            ISystemContext systemContext, IDependencyResolver dependencyResolver)
 		{
 			this.accountContext = accountContext;
 			this.cryptoProvider = cryptoProvider;
 			this.recoveryResolver = recoveryResolver;
 			this.systemContext = systemContext;
-            this.userValidator = userValidator;
+            
+            //This resolved instance is delayed until here because we want to make sure the user validator also uses the same DB Access instances
+            this.userValidator = dependencyResolver.Resolve<IUserValidator>(new DependencyOverride(typeof(IUsersRepository), accountContext.Users));
 		}
 
         #endregion Ctor

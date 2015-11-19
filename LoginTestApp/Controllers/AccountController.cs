@@ -7,6 +7,7 @@ using LoginTestApp.Business.Contracts.Managers;
 using LoginTestApp.Business.Contracts.Models;
 using LoginTestApp.Common;
 using LoginTestApp.Crosscutting.Contracts;
+using Microsoft.AspNet.Identity;
 
 namespace LoginTestApp.Controllers
 {

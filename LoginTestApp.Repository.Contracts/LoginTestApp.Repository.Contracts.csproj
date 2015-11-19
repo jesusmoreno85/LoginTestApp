@@ -52,7 +52,6 @@
     <Compile Include="IContext.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IAccountContext.cs" />
-    <Compile Include="IRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\IDynamicLinksRepository.cs" />
     <Compile Include="Repositories\IUsersRepository.cs" />
