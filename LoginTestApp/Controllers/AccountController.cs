@@ -137,7 +137,7 @@ namespace LoginTestApp.Controllers
         public ActionResult UpdateAccount(User newAccount)
         {
             //TODO(AngelM): Check if it worth to expose a Web API method
-            BusinessOperationResult<bool> result = accountManager.CreateNew(newAccount);
+            BusinessOperationResult<bool> result = accountManager.Update(newAccount);
 
             if (result.IsError)
             {

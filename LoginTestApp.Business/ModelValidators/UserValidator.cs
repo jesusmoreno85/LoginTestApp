@@ -43,6 +43,8 @@ namespace LoginTestApp.Business.ModelValidators
         private void IsValidForCreateRules()
         {
             IsValidForSaveRules();
+
+            CheckAvailableAlias();
         }
 
         private void IsValidForUpdateRules()
