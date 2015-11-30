@@ -29,7 +29,7 @@ namespace LoginTestApp.Repository.Repositories
         {
             bool isTaken = this.DbSet
                             .Any(x => x.Alias == alias
-                                && x.Id != 0);
+                                && x.Id != id);
 
             return !isTaken;
         }
