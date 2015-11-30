@@ -106,6 +106,15 @@ namespace LoginTestApp.Business.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The current data state is not valid for this request.
+        /// </summary>
+        internal static string NotValidInternalDataState {
+            get {
+                return ResourceManager.GetString("NotValidInternalDataState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There is no recovery strategy for the recovery option &apos;{0}&apos;.
         /// </summary>
         internal static string RecoveryStrategyNotFound {

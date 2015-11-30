@@ -53,6 +53,15 @@ namespace LoginTestApp.Business.ModelValidators
                 .GreaterThan(0)
                 .WithMessage(Resources.NotValidIdValueForUpdate);
 
+            //TODO(AngelM): We should have to re-think how to handle internal data state 
+            RuleFor(x => x.CreatedBy)
+                .NotEmpty(30)
+                .WithMessage(Resources.NotValidInternalDataState);
+
+            RuleFor(x => x.CreatedDate)
+                .NotNull()
+                .WithMessage(Resources.NotValidInternalDataState);
+
             IsValidForSaveRules();
 
             When(x => x.Id > 0, CheckAvailableAlias);

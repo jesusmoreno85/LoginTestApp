@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using FluentValidation;
@@ -14,64 +15,65 @@ namespace LoginTestApp.Business.ModelValidators
     public abstract class ValidatorBase<T> : AbstractValidator<T>, Contracts.ModelValidators.IValidator<T>
         where T : class, IModel
     {
-        private static readonly ConcurrentDictionary<Type, Dictionary<string, Action>> cache = new ConcurrentDictionary<Type, Dictionary<string, Action>>();
+        // ReSharper disable once InconsistentNaming
+        // ReSharper disable once StaticMemberInGenericType
+        private static readonly ConcurrentDictionary<Type, Dictionary<string, MethodInfo>> cache = new ConcurrentDictionary<Type, Dictionary<string, MethodInfo>>();
 
         protected ValidatorBase()
         {
-            var currentType = GetType();
-
-            if (!LoadMappingsFromCache(currentType))
-            {
-                //The current type hasn't been already loaded 
-                LoadMappingsFromTypeDefinition(currentType);
-            }
+            CreateRuleSets();
         }
 
         #region Private Methods
 
         /// <summary>
-        /// It tries to load the mappings from the cache
+        /// Creates the rule sets mapped in current concrete type
         /// </summary>
-        /// <param name="currentType">Concrete type of the implementation</param>
-        /// <returns>True if the type is already in the cache otherwise, false</returns>
-        private bool LoadMappingsFromCache(Type currentType)
+        /// <remarks>It the current type is already loaded in the cache then just the rulesets are configured to the validation engine</remarks>
+        private void CreateRuleSets()
         {
+            var currentType = GetType();
+
             // ReSharper disable once RedundantAssignment
-            Dictionary<string, Action> mappedMethods;
+            Dictionary<string, MethodInfo> mappedMethods = new Dictionary<string, MethodInfo>();
 
-            if (!cache.TryGetValue(currentType, out mappedMethods)) return false;
-
-            //If the code gets here the current type has been already loaded so, there is no longer need of using reflection
-            foreach (var methodMapping in mappedMethods)
+            if (!cache.TryGetValue(currentType, out mappedMethods))
             {
-                RuleSet(methodMapping.Key, methodMapping.Value);
+                //The current type hasn't been already loaded 
+                mappedMethods = GetMappingsFromTypeDefinition(currentType);
+
+                cache.TryAdd(currentType, mappedMethods);
             }
 
-            return true;
+            //No mapped rules to configure
+            if (!mappedMethods.Any()) return;
+            
+            foreach (var targetMethod in mappedMethods)
+            {
+                Action dynamicAction = () => targetMethod.Value.Invoke(this, new object[] { });
+
+                //It creates the dynamic action for the ruleset name, e.g. IsValidForCreate
+                RuleSet(targetMethod.Key, dynamicAction);
+            }
         }
 
         /// <summary>
         /// Will load the mapped types from the reflected metadata
         /// </summary>
         /// <param name="currentType">Concrete type of the implementation</param>
-        private void LoadMappingsFromTypeDefinition(Type currentType)
+        private Dictionary<string, MethodInfo> GetMappingsFromTypeDefinition(Type currentType)
         {
-            var mappedMethods = new Dictionary<string, Action>();
+            var mappedMethods = new Dictionary<string, MethodInfo>();
 
             foreach (var methodInfo in currentType.GetMethodsWithAttribute<RuleSetMapperAttribute>())
             {
                 string ruleSetName = methodInfo.Key.Name;
                 var targetMethod = currentType.GetMethod(methodInfo.Value.RuleSetTargetMethodName, BindingFlags.NonPublic | BindingFlags.Instance);
 
-                Action dynamicAction = () => targetMethod.Invoke(this, new object[] { });
-
-                mappedMethods.Add(ruleSetName, dynamicAction);
-
-                //It creates the dynamic action for the ruleset name, e.g. IsValidForCreate
-                RuleSet(ruleSetName, dynamicAction);
+                mappedMethods.Add(ruleSetName, targetMethod);
             }
 
-            cache.TryAdd(currentType, mappedMethods);
+            return mappedMethods;
         }
 
         #endregion Private Methods
