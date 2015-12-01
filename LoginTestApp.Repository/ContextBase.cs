@@ -15,6 +15,9 @@ using LoginTestApp.Repository.Contracts;
 
 namespace LoginTestApp.Repository
 {
+    /// <summary>
+    /// Defines common logic for db context interactions
+    /// </summary>
     public abstract class ContextBase : IContext 
     {
         protected readonly IDataMapper DataMapper;
@@ -23,7 +26,10 @@ namespace LoginTestApp.Repository
 
         private readonly IDbContext dbContext;
         private readonly IDependencyResolver dependencyResolver;
-        private readonly ConcurrentDictionary<Type, IRepository> repositories;
+
+        /// <summary>
+        /// Keeps a reference of the IEntity and IModel instances were a change has been requested
+        /// </summary>
         private readonly ConcurrentDictionary<IModel, IEntity> syncDictionary;
 
         #endregion Private Members
@@ -37,7 +43,6 @@ namespace LoginTestApp.Repository
             this.dbContext = dbContext;
             DataMapper = dataMapper;
             this.dependencyResolver = dependencyResolver;
-            repositories = new ConcurrentDictionary<Type, IRepository>();
 
             syncDictionary = new ConcurrentDictionary<IModel, IEntity>();
         }
@@ -47,7 +52,7 @@ namespace LoginTestApp.Repository
         #region Protected Methods
 
         /// <summary>
-        /// Refreshes the Model objects when a change operation was perform in the corresponding entity object
+        /// Refreshes the Model objects when a change operation has been performed in the corresponding entity object
         /// </summary>
         /// <param name="affectedRecords">Records affected by last operation</param>
         /// <param name="dbEntityEntries">The affected entities</param>
@@ -74,19 +79,11 @@ namespace LoginTestApp.Repository
         /// <returns></returns>
         protected T GetRepository<T>() where T : IRepository
         {
-            IRepository repository;
-            Type requestedType = typeof(T);
+            IRepository repository = dependencyResolver.Resolve<T>(
+                DependencyOverride.CreateNew<DbContext>(dbContext),
+                DependencyOverride.CreateNew<IDataMapper>(DataMapper));
 
-            if (!repositories.TryGetValue(requestedType, out repository))
-            {
-                repository = dependencyResolver.Resolve<T>(
-                    new DependencyOverride(typeof(DbContext), dbContext),
-                    new DependencyOverride(DataMapper));
-
-                repositories.TryAdd(requestedType, repository);
-
-                ((IDataInteractions)repository).OnDataChange += OnDataChangeHandler;
-            }
+            ((IDataInteractions)repository).OnDataChange += OnDataChangeHandler;
 
             return (T)repository;
         }

@@ -80,7 +80,6 @@
     <Compile Include="BusinessOperation\BusinessMessageSource.cs" />
     <Compile Include="BusinessOperation\BusinessOperationResult.cs" />
     <Compile Include="BusinessOperation\BusinessValidationResult.cs" />
-    <Compile Include="Enums\PasswordRecoveryOption.cs" />
     <Compile Include="IModel.cs" />
     <Compile Include="Managers\IAccountManager.cs" />
     <Compile Include="Models\DynamicLink.cs" />
@@ -101,6 +100,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Enums\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

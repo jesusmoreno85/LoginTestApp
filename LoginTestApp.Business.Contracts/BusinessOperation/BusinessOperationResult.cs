@@ -57,7 +57,7 @@ namespace LoginTestApp.Business.Contracts.BusinessOperation
         {
             var result = new BusinessOperationResult<bool>(IsError);
 
-            BusinessMessage[] messages = {};
+            BusinessMessage[] messages = new BusinessMessage[Messages.Count];
             Messages.CopyTo(messages);
 
             result.Messages = messages.ToList();

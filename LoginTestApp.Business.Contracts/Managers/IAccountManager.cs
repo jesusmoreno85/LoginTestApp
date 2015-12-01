@@ -1,6 +1,5 @@
 ﻿using System;
 using LoginTestApp.Business.Contracts.BusinessOperation;
-using LoginTestApp.Business.Contracts.Enums;
 using LoginTestApp.Business.Contracts.Models;
 
 namespace LoginTestApp.Business.Contracts.Managers
@@ -29,7 +28,7 @@ namespace LoginTestApp.Business.Contracts.Managers
         /// Password recovery request
         /// </summary>
         /// <param name="alias">The user's alias</param>
-        /// <param name="recoveryOption">The recovery option to use. See <see cref="PasswordRecoveryOption"/></param>
+        /// <param name="recoveryOption">The recovery strategy to use.</param>
         /// <returns>True if there was no issues with the request execution</returns>
         BusinessOperationResult<bool> PasswordRecovery(string alias, string recoveryOption);
 

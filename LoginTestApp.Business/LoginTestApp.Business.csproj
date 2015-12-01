@@ -96,7 +96,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Strategies\PasswordRecoveryStrategy.cs" />
+    <Compile Include="Strategies\PasswordRecoveryByRecoveryClue.cs" />
+    <Compile Include="Strategies\PasswordRecoveryByResetLink.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LoginTestApp.Business.Contracts\LoginTestApp.Business.Contracts.csproj">

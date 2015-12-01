@@ -18,21 +18,22 @@ namespace LoginTestApp.Business.Managers
 
         private readonly IAccountContext accountContext;
 		private readonly ICryptoProvider cryptoProvider;
-		private readonly IPasswordRecoveryStrategy recoveryResolver;
 		private readonly ISystemContext systemContext;
+	    private readonly IDependencyResolver dependencyResolver;
+
 	    private readonly IUserValidator userValidator;
 
         public AccountManager(
-            IAccountContext accountContext, ICryptoProvider cryptoProvider, IPasswordRecoveryStrategy recoveryResolver, 
+            IAccountContext accountContext, ICryptoProvider cryptoProvider, 
             ISystemContext systemContext, IDependencyResolver dependencyResolver)
 		{
 			this.accountContext = accountContext;
 			this.cryptoProvider = cryptoProvider;
-			this.recoveryResolver = recoveryResolver;
 			this.systemContext = systemContext;
-            
+            this.dependencyResolver = dependencyResolver;
+
             //This resolved instance is delayed until here because we want to make sure the user validator also uses the same DB Access instances
-            this.userValidator = dependencyResolver.Resolve<IUserValidator>(new DependencyOverride(typeof(IUsersRepository), accountContext.Users));
+            this.userValidator = dependencyResolver.Resolve<IUserValidator>(DependencyOverride.CreateNew<IUsersRepository>(accountContext.Users));
 		}
 
         #endregion Ctor
@@ -56,8 +57,8 @@ namespace LoginTestApp.Business.Managers
 		    if (!result.IsError)
 		    {
                 //Everything is fine we can go with the Recovery Strategy
-                var recoveryStrategy = recoveryResolver.GetRecoveryStrategy(recoveryOption);
-                recoveryStrategy?.Invoke(result.OperationResult);
+                var recoveryStrategy = dependencyResolver.Resolve<IPasswordRecoveryStrategy>(recoveryOption);
+                recoveryStrategy.PerformRecovery(result.OperationResult);
             }
 
 		    return result.CastToBooleanResult();

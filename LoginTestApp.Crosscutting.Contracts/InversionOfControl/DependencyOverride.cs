@@ -3,13 +3,13 @@
 namespace LoginTestApp.Crosscutting.Contracts.InversionOfControl
 {
     /// <summary>
-    /// Represents an inversion of control dependency override
+    /// Represents an dependency override by name or type
     /// </summary>
     public class DependencyOverride
     {
-        public DependencyOverride(object dependencyValue)
+        public DependencyOverride(string dependencyName, object dependencyValue)
         {
-            DependencyType = dependencyValue.GetType();
+            DependencyName = dependencyName;
             DependencyValue = dependencyValue;
         }
 
@@ -19,8 +19,17 @@ namespace LoginTestApp.Crosscutting.Contracts.InversionOfControl
             DependencyValue = dependencyValue;
         }
 
-        public Type DependencyType { get; set; }
+        public string DependencyName { get; }
 
-        public object DependencyValue { get; set; }
+        public Type DependencyType { get; }
+
+        public object DependencyValue { get; }
+
+        public static DependencyOverride CreateNew<T>(object dependencyValue)
+        {
+            if(!(dependencyValue is T)) throw new ArgumentException(Properties.Resources.NotValidTypeOnDependencyOverride, nameof(dependencyValue));
+
+            return new DependencyOverride(typeof(T), dependencyValue);
+        }
     }
 }
