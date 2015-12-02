@@ -20,6 +20,19 @@ namespace LoginTestApp.Repository.MappingConfiguration
 
 			CreateMap<Entities.DynamicLink, DynamicLink>()
 				.IgnoreAllNonExisting();
-		}
+
+            CreateMap<Entities.Module, Module>()
+                .IgnoreAllNonExisting();
+
+            CreateMap<Module, Entities.Module>()
+                .IgnoreAllNonExisting();
+
+            CreateMap<Entities.ModuleAction, ModuleAction>()
+                .IgnoreAllNonExisting();
+
+            CreateMap<ModuleAction, Entities.ModuleAction>()
+                .IgnoreAllNonExisting();
+
+        }
 	}
 }

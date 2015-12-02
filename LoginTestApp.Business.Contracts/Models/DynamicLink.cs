@@ -2,8 +2,8 @@
 
 namespace LoginTestApp.Business.Contracts.Models
 {
-	public class DynamicLink : ModelBase
-	{
+	public class DynamicLink : ModelBase<int>
+    {
 		public Guid GuidId { get; set; }
 
 		public string Type { get; set; }

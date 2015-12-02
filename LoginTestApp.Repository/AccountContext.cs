@@ -22,6 +22,12 @@ namespace LoginTestApp.Repository
 
         public IDynamicLinksRepository DynamicLinks => GetRepository<IDynamicLinksRepository>();
 
+        public IModuleRepository Modules => GetRepository<IModuleRepository>();
+
+        public IModuleActionRepository ModuleActions => GetRepository<IModuleActionRepository>();
+
+        public IRoleRepository Roles => GetRepository<IRoleRepository>();
+
         #endregion Repositories
     }
 }

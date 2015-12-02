@@ -1,8 +1,8 @@
 ﻿
 namespace LoginTestApp.DataAccess.Contracts.Entities
 {
-	public class User : EntityBase
-	{
+	public class User : EntityBase<int>
+    {
 		public string Alias { get; set; }
 
 		public string Password { get; set; }
@@ -15,6 +15,16 @@ namespace LoginTestApp.DataAccess.Contracts.Entities
 
 		public string PhoneNumber { get; set; }
 
-		public bool IsActive { get; set; }
-	}
+        public int AccountType { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public int RoleId { get; set; }
+
+        #region Navigation Properties
+
+        public Role Role { get; set; }
+
+        #endregion Navigation Properties
+    }
 }

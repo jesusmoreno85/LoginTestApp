@@ -2,10 +2,13 @@
 
 namespace LoginTestApp.Business.Contracts.Models
 {
-	public class ModelBase : IModel<int>
+	public class ModelBase<T> : ModelBase, IModel<T>
 	{
-		public int Id { get; set; }
+		public T Id { get; set; }
+    }
 
+    public class ModelBase : IModel
+    {
         public string CreatedBy { get; set; }
 
         public DateTime? CreatedDate { get; set; }

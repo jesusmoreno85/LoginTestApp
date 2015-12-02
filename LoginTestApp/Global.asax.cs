@@ -15,7 +15,7 @@ namespace LoginTestApp
     {
         protected void Application_Start()
         {
-            Database.SetInitializer(new LoginTestAppInitializer(new CryptoProvider()));
+            Database.SetInitializer(new LoginTestAppInitializer());
             //Database.SetInitializer<LoginTestAppContext>(null);
 
             AreaRegistration.RegisterAllAreas();

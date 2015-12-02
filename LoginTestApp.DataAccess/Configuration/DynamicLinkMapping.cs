@@ -1,12 +1,13 @@
-﻿using LoginTestApp.DataAccess.Contracts;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using LoginTestApp.DataAccess.Contracts;
 using LoginTestApp.DataAccess.Contracts.Entities;
 
 namespace LoginTestApp.DataAccess.Configuration
 {
-    public class DynamicLinksMapping : EntityTypeConfigurationBase<DynamicLink>
+    public class DynamicLinksMapping : EntityTypeConfigurationBaseInt<DynamicLink>
     {
         public DynamicLinksMapping()
-            : base("DynamicLinks")
+            : base("DynamicLinks", DatabaseGeneratedOption.Identity)
         {
             Property(t => t.GuidId)
                 .IsRequired()

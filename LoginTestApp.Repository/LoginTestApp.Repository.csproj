@@ -69,6 +69,9 @@
     <Compile Include="IDataInteractions.cs" />
     <Compile Include="MappingConfiguration\LoginTestAppConfigProfile.cs" />
     <Compile Include="Repositories\DynamicLinksRepository.cs" />
+    <Compile Include="Repositories\ModuleRepository.cs" />
+    <Compile Include="Repositories\ModuleRoleRepository.cs" />
+    <Compile Include="Repositories\RoleRepository.cs" />
     <Compile Include="Repositories\UsersRepository.cs" />
     <Compile Include="RepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -3,7 +3,7 @@
 namespace LoginTestApp.DataAccess.Contracts
 {
 	public interface IEntity<TKey> : IEntity
-	{
+    {
 		TKey Id { get; set; }
 	}
 

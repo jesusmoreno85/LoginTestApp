@@ -1,8 +1,8 @@
 ﻿
 namespace LoginTestApp.Business.Contracts.Models
 {
-    public class User : ModelBase
-	{
+    public class User : ModelBase<int>
+    {
 		public string Alias { get; set; }
 
 		public string Password { get; set; }

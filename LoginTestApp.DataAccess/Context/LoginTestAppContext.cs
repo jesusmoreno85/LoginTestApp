@@ -26,6 +26,12 @@ namespace LoginTestApp.DataAccess.Context
 
 		public IDbSet<DynamicLink> DynamicLinks { get; set; }
 
+        public IDbSet<Module> Modules { get; set; }
+
+        public IDbSet<ModuleAction> ModuleActions { get; set; }
+
+        public IDbSet<Role> Roles { get; set; }
+
         #endregion ILoginTestAppContext
-	}
+    }
 }

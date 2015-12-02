@@ -80,10 +80,15 @@
     <Compile Include="BusinessOperation\BusinessMessageSource.cs" />
     <Compile Include="BusinessOperation\BusinessOperationResult.cs" />
     <Compile Include="BusinessOperation\BusinessValidationResult.cs" />
+    <Compile Include="Enums\AccessType.cs" />
+    <Compile Include="Enums\AccountType.cs" />
     <Compile Include="IModel.cs" />
     <Compile Include="Managers\IAccountManager.cs" />
     <Compile Include="Models\DynamicLink.cs" />
     <Compile Include="Models\ModelBase.cs" />
+    <Compile Include="Models\Module.cs" />
+    <Compile Include="Models\ModuleAction.cs" />
+    <Compile Include="Models\Role.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="ModelValidators\IValidator.cs" />
     <Compile Include="ModelValidators\IUserValidator.cs" />
@@ -101,9 +106,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Enums\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -54,7 +54,10 @@
     <Compile Include="IAccountContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\IDynamicLinksRepository.cs" />
+    <Compile Include="Repositories\IModuleActionRepository.cs" />
+    <Compile Include="Repositories\IRoleRepository.cs" />
     <Compile Include="Repositories\IUsersRepository.cs" />
+    <Compile Include="Repositories\IModuleRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LoginTestApp.Business.Contracts\LoginTestApp.Business.Contracts.csproj">

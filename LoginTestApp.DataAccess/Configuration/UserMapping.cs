@@ -1,13 +1,14 @@
-﻿using LoginTestApp.DataAccess.Contracts;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using LoginTestApp.DataAccess.Contracts;
 using LoginTestApp.DataAccess.Contracts.Entities;
 using Constants = LoginTestApp.DataAccess.Contracts.Constants;
 
 namespace LoginTestApp.DataAccess.Configuration
 {
-    public class UserMapping : EntityTypeConfigurationBase<User>
+    public class UserMapping : EntityTypeConfigurationBaseInt<User>
     {
         public UserMapping()
-            : base("Users")
+            : base("Users", DatabaseGeneratedOption.Identity)
         {
             Property(t => t.Alias)
                 .IsRequired()
@@ -35,6 +36,15 @@ namespace LoginTestApp.DataAccess.Configuration
             Property(t => t.IsActive)
                 .IsRequired()
                 .HasColumnName("IsActive");
+
+            Property(t => t.RoleId)
+                .IsRequired()
+                .HasColumnName("RoleId");
+
+            //Navigation Properties
+            HasRequired(t => t.Role)
+                .WithMany(t => t.Users)
+                .HasForeignKey(t => t.RoleId);
         }
     }
 }

@@ -49,6 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\DynamicLinkMapping.cs" />
+    <Compile Include="Configuration\ModuleActionMapping.cs" />
+    <Compile Include="Configuration\ModuleMapping.cs" />
+    <Compile Include="Configuration\RoleMapping.cs" />
     <Compile Include="Configuration\UserMapping.cs" />
     <Compile Include="Context\IDbContextBase.cs" />
     <Compile Include="Context\LoginTestAppContext.cs" />
@@ -79,11 +82,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="InitializationScripts\ModelBase.sql" />
+    <Content Include="Initialization\CoreSetup.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Initialization\ModelBase.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>

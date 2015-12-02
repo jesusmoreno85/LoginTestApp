@@ -52,10 +52,15 @@
     <Compile Include="Constants\Users.cs" />
     <Compile Include="Context\IDbContext.cs" />
     <Compile Include="Context\ILoginTestAppContext.cs" />
+    <Compile Include="Entities\EntityBase.cs" />
+    <Compile Include="Entities\Module.cs" />
+    <Compile Include="Entities\ModuleAction.cs" />
+    <Compile Include="Entities\Role.cs" />
     <Compile Include="EntityTypeConfigurationBase.cs" />
+    <Compile Include="EntityTypeConfigurationBaseInt.cs" />
+    <Compile Include="EntityTypeConfigurationBaseString.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Entities\DynamicLink.cs" />
-    <Compile Include="Entities\EntityBase.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -5,8 +5,8 @@ namespace LoginTestApp.DataAccess.Contracts.Entities
 	/// <summary>
 	/// Represents the different dynamic web links 
 	/// </summary>
-	public class DynamicLink : EntityBase
-	{
+	public class DynamicLink : EntityBase<int>
+    {
 		public Guid GuidId { get; set; }
 
 		public string Type { get; set; }

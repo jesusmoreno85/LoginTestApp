@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
 using LoginTestApp.Crosscutting.Contracts;
-using LoginTestApp.DataAccess.Contracts.Entities;
 using LoginTestApp.DataAccess.Properties;
 using Constants = LoginTestApp.DataAccess.Contracts.Constants;
 
@@ -9,40 +8,29 @@ namespace LoginTestApp.DataAccess.Context
 {
 	public class LoginTestAppInitializer : CreateDatabaseIfNotExists<LoginTestAppContext>
 	{
-		private readonly ICryptoProvider cryptoProvider;
-
-		public LoginTestAppInitializer(ICryptoProvider cryptoProvider)
-		{
-			this.cryptoProvider = cryptoProvider;
-		}
-
 		protected override void Seed(LoginTestAppContext context)
 		{
-			ExecuteModelBaseScripts(context,
-				"Users");
+            //Initialize the database core state
+		    context.Database.ExecuteSqlCommand(Resources.CoreSetup_Sql);
 
-			context.Users.Add(new User()
-			{
-				Id = 1,
-				Alias = "admin",
-				FullName = "Admin Service Account",
-				Password = cryptoProvider.Encrypt("Admin7209"),
-				Email = "jesusmoreno85@hotmail.com",
-				PhoneNumber = "6671372531",
-				PasswordRecoveryClue = cryptoProvider.Encrypt("Password RQ"),
-				IsActive = true
-			});
+			//ExecuteModelBaseScripts(context,
+			//	"Users");
 
 			context.SaveChanges();
 		}
 
+        /// <summary>
+        /// Configures some common constraints over the tables 
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="tableNames"></param>
 		private static void ExecuteModelBaseScripts(DbContext dbContext, params string[] tableNames)
 		{
 			foreach (var tableName in tableNames)
 			{
 				if (string.IsNullOrEmpty(tableName))
 				{
-					throw new ArgumentNullException("tableNames", string.Format("tableNames collections containts a null or empty value"));
+					throw new ArgumentNullException(nameof(tableNames), @"tableNames collections containts a null or empty value");
 				}
 
 				dbContext.Database.ExecuteSqlCommand(GetModelBaseScript(tableName));
